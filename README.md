@@ -23,12 +23,8 @@ class Owner {
 Owner --|> Person
 Owner "1" -- "0..*" Car : sells
 
-class Client {
-    - id: int FK
-}
-Client --|> Person
-Client "1" -- "0..*" Sale : buys
-Client "1" -- "0..*" Car : owns
+
+Owner "1" -- "0..*" Sale : buys
 
 class Car {
     - id: int PK
@@ -37,7 +33,6 @@ class Car {
     - model: String
     - year: int
     - color: String
-    - vin: String
     - price: decimal
     - availability: String
 }
@@ -61,5 +56,5 @@ class Brand {
     - Website : String
     - Description : String
 }
-Brand "1" -- "0..*" Car : is on
+
 ```
