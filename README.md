@@ -8,7 +8,7 @@ HES-SO School Project
 ```mermaid
 classDiagram
 
-class Person {
+class Account {
     - id: int PK
     - lastname: String
     - firstname: String
@@ -20,11 +20,16 @@ class Person {
 class Owner {
     - contactInfo: String
 }
-Owner --|> Person
+Owner --|> Account
 Owner "1" -- "0..*" Car : sells
 
 
-Owner "1" -- "0..*" Sale : buys
+class Buyer {
+    - contactInfo: String
+    - creditCard: String
+}
+Buyer --|> Account
+Buyer "1" -- "0..*" Sale : is buy in
 
 class Car {
     - id: int PK
@@ -32,7 +37,10 @@ class Car {
     - brandId: int FK
     - model: String
     - year: int
-    - color: String
+    - color: List<String>
+    - typeOfFuel : TypeOfFuel
+    - Kilometers: int
+    - options: List<String>
     - price: decimal
     - availability: String
 }
@@ -56,5 +64,11 @@ class Brand {
     - Website : String
     - Description : String
 }
+
+class TypeOfFuel {
+    - id: int PK
+    - name: String
+}
+TypeOfFuel  --  Car : has
 
 ```
