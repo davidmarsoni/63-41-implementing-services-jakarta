@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import org.junit.Test;
 
 import ch.hevs.businessobject.Account;
-import ch.hevs.businessobject.Client;
+import ch.hevs.businessobject.Buyer;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -20,19 +20,19 @@ public class PopulateDB extends TestCase {
 		EntityTransaction tx = null;
 		try {
 			
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("bankPU_unitTest");
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("carsalePU_unitTest");
 			EntityManager em = emf.createEntityManager();
 			tx = em.getTransaction();
 			tx.begin();
-		
-			Client c1 = new Client("Zinedine", "Zidane");
+			tx.commit();
+			/*Buyer c1 = new Buyer("Zinedine", "Zidane");
 			Account a1 = new Account("1000", 10000, c1, "Compte Courant");
 			
-			Client c2 = new Client("Michel", "Platini");
+			Buyer c2 = new Buyer("Michel", "Platini");
 			Account a2 = new Account("1001", 20000, c2, "Compte Courant");
 			Account a3 = new Account("1003", 1000, c2, "Livret A");
 	
-			Client c3 = new Client("Jean-Pierre", "Papin");
+			Buyer c3 = new Buyer("Jean-Pierre", "Papin");
 			Account a4 = new Account("1002", 30000, c3, "Compte Courant");
 	
 			em.persist(c1);
@@ -43,7 +43,7 @@ public class PopulateDB extends TestCase {
 			em.persist(a2);
 			em.persist(a3);
 			em.persist(a4);
-			tx.commit();
+			tx.commit();*/
 
 		} catch (Exception e) {
 			e.printStackTrace();

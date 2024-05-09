@@ -4,28 +4,27 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Owner")
-public class Owner extends Person {
+public class Owner extends Account {
     @Id
     @GeneratedValue
     private Long id;
 
-    @ManyToOne()
+    @OneToMany(mappedBy = "owner")
     private List<Car> cars;
 
+    //attributes
+    private String IBAN;
+
     public Owner() {
-        this(null, null, null, null, null,null);
     }
 
-    public Owner(String firstname, String lastname, String address, String phone, String email,Date birthdate) {
+    public Owner(String firstname, String lastname, String address, String phone, String email,Date birthdate, String IBAN) {
         super(firstname, lastname, address, phone, email, birthdate);
+        this.IBAN = IBAN;
         this.cars = new ArrayList<Car>();
     }
 
@@ -35,14 +34,6 @@ public class Owner extends Person {
      */
     public Long getId() {
         return id;
-    }
-
-    /**
-     * Set the id of the owner.
-     * @param id the id to set
-     */
-    public void setId(Long id) {
-        this.id = id;
     }
 
     /**

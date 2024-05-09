@@ -18,14 +18,13 @@ class Account {
 }
 
 class Owner {
-    - contactInfo: String
+    - IBAN: String
 }
 Owner --|> Account
 Owner "1" -- "0..*" Car : sells
 
 
 class Buyer {
-    - contactInfo: String
     - creditCard: String
 }
 Buyer --|> Account

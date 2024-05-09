@@ -3,22 +3,21 @@ package ch.hevs.businessobject;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "CarBrand")
 public class CarBrand {
-    private int id;
-    private String name;
+    @Id
+    @GeneratedValue
+    private Long id;
 
     //relations
     @OneToMany(mappedBy = "carBrand")
     private List<Car> cars;
 
     //attributes
+    private String name;
     @Column(nullable = true)
     private String country;
     @Column(nullable = true)
@@ -61,17 +60,8 @@ public class CarBrand {
      * 
      * @return the ID of the car brand
      */
-    public int getId() {
+    public Long getId() {
         return id;
-    }
-
-    /**
-     * Set the ID of the car brand.
-     * 
-     * @param id the ID of the car brand
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**

@@ -3,7 +3,7 @@ package ch.hevs.bankservice;
 import java.util.List;
 
 import ch.hevs.businessobject.Account;
-import ch.hevs.businessobject.Client;
+import ch.hevs.businessobject.Buyer;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -12,7 +12,31 @@ import jakarta.persistence.Query;
 
 @Stateless
 public class BankBean implements Bank {
-	
+	@Override
+	public Account getAccount(String accountDescription, String lastnameOwner) {
+		return null;
+	}
+
+	@Override
+	public List<Account> getAccountListFromClientLastname(String lastname) {
+		return null;
+	}
+
+	@Override
+	public void transfer(Account compteSrc, Account compteDest, int montant) throws Exception {
+
+	}
+
+	@Override
+	public List<Buyer> getClients() {
+		return null;
+	}
+
+	@Override
+	public Buyer getClient(long clientid) {
+		return null;
+	}
+	/*
 	@PersistenceContext(unitName = "bankPU", type=PersistenceContextType.TRANSACTION)
 	private EntityManager em;
 
@@ -29,7 +53,7 @@ public class BankBean implements Bank {
 	}
 	
 	public List<Account> getAccountListFromClientLastname(String lastname) {
-		return (List<Account>) em.createQuery("SELECT c.accounts FROM Client c where c.lastname=:lastname").setParameter("lastname", lastname).getResultList();
+		return (List<Account>) em.createQuery("SELECT c.accounts FROM Buyer c where c.lastname=:lastname").setParameter("lastname", lastname).getResultList();
 	}
 
 	public void transfer(Account srcAccount, Account destAccount, int amount) {
@@ -43,11 +67,11 @@ public class BankBean implements Bank {
 		destRealAccount.credit(amount);
 	}
 
-	public List<Client> getClients() {
-		return em.createQuery("FROM Client").getResultList();
+	public List<Buyer> getClients() {
+		return em.createQuery("FROM Buyer").getResultList();
 	}
 	
-	public Client getClient(long clientid) {
-		return (Client) em.createQuery("FROM Client c where c.id=:id").setParameter("id", clientid).getSingleResult();
-	}
+	public Buyer getClient(long clientid) {
+		return (Buyer) em.createQuery("FROM Buyer c where c.id=:id").setParameter("id", clientid).getSingleResult();
+	}*/
 }

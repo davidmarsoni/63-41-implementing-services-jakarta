@@ -3,7 +3,7 @@ package ch.hevs.bankservice;
 import java.util.List;
 
 import ch.hevs.businessobject.Account;
-import ch.hevs.businessobject.Client;
+import ch.hevs.businessobject.Buyer;
 import jakarta.ejb.Local;
 
 @Local
@@ -15,7 +15,7 @@ public interface Bank {
 
 	void transfer(Account compteSrc, Account compteDest, int montant) throws Exception;
 
-	List<Client> getClients();
+	List<Buyer> getClients();
 
-	Client getClient(long clientid);
+	Buyer getClient(long clientid);
 }

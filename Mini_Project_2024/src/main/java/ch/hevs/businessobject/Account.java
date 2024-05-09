@@ -1,83 +1,153 @@
 package ch.hevs.businessobject;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import java.sql.Date;
 
-@Entity
+import jakarta.persistence.Column;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+
+/**
+ * Person
+ */
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Account {
+    private String firstname;
+    private String lastname;
+    private String address;
+    private String phone;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
-	private Long id;
-	private String number;
-	private long saldo;	
-	private String description;
-	
-	// relations
-	@ManyToOne
-	private Client owner;
+    private String email;
 
-	// id 
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	// number
-	public String getNumber() {
-		return number;
-	}
-	public void setNumber(String number) {
-		this.number = number;
-	}
-	
-	// saldo	
-	public long getSaldo() {
-		return saldo;
-	}
-	public void setSaldo(long saldo) {
-		this.saldo = saldo;
-	}
-	
-	// description
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	// owner (from Client)
-	public Client getOwner() {
-		return owner;
-	}
-	public void setOwner(Client owner) {
-		this.owner = owner;
-	}
-	
-	// methods
-	public void debit(int amount) {
-		long newAmount = getSaldo() - amount;
-		setSaldo(newAmount);
-	}
-	
-	public void credit(int amount) {
-		setSaldo(getSaldo() + amount);
-	}
+    @Column(nullable = true)
+    private Date birthdate;
 
-	// constructors
-	public Account() {
-	}
-	public Account(String number, long saldo, Client owner,
-			String description) {
-		this.number = number;
-		this.saldo = saldo;
-		this.owner = owner;
-		this.description = description;
-	}
+    public Account() {
+    }
+
+    public Account(String firstname, String lastname, String address, String phone, String email, Date birthdate) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.birthdate = birthdate;
+    }
+
+    /**
+     * Get the first name of the person.
+     * 
+     * @return String the first name
+     */
+    public String getFirstname() {
+        return firstname;
+    }
+
+    /**
+     * Set the first name of the person.
+     * 
+     * @param firstname the first name to set
+     */
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    /**
+     * Get the last name of the person.
+     * 
+     * @return String the last name
+     */
+    public String getLastname() {
+        return lastname;
+    }
+
+    /**
+     * Set the last name of the person.
+     * 
+     * @param lastname the last name to set
+     */
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    /**
+     * Get the address of the person.
+     * 
+     * @return String the address
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * Set the address of the person.
+     * 
+     * @param address the address to set
+     */
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    /**
+     * Get the phone number of the person.
+     * 
+     * @return String the phone number
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * Set the phone number of the person.
+     * 
+     * @param phone the phone number to set
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    /**
+     * Get the email address of the person.
+     * 
+     * @return String the email address
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Set the email address of the person.
+     * 
+     * @param email the email address to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * Get the birthdate of the person.
+     * 
+     * @return Date the birthdate
+     */
+    public Date getBirthdate() {
+        return birthdate;
+    }
+
+    /**
+     * Set the birthdate of the person.
+     * 
+     * @param birthdate the birthdate to set
+     */
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public String getFullName() {
+        return this.firstname + " " + this.lastname;
+    }
+
+    @Override
+    public String toString() {
+        return "Person [address=" + address + ", birthdate=" + birthdate + ", email=" + email + ", firstname="
+                + firstname + ", lastname=" + lastname + ", phone=" + phone + "]";
+    }
 }

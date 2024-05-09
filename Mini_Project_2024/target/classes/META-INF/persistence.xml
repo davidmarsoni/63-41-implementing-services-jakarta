@@ -5,10 +5,16 @@
              version="3.0">
             
 <!-- 	For use with the application server -->
-	<persistence-unit name="bankPU">
+	<persistence-unit name="carsalePU">
 		<jta-data-source>java:/labsDS</jta-data-source>
-		<class>ch.hevs.businessobject.Client</class>
+		<!-- Buyer, Owner, Account, Sale, Car, CarBrand, TypeOfFuel -->
+		<class>ch.hevs.businessobject.Buyer</class>
+		<class>ch.hevs.businessobject.Owner</class>
 		<class>ch.hevs.businessobject.Account</class>
+		<class>ch.hevs.businessobject.Sale</class>
+		<class>ch.hevs.businessobject.Car</class>
+		<class>ch.hevs.businessobject.CarBrand</class>
+		<class>ch.hevs.businessobject.TypeOfFuel</class>
 		<properties>
 			<property name="hibernate.cache.use_second_level_cache" value="true" />
 			<property name="hibernate.cache.use_query_cache" value="true" />
@@ -20,10 +26,16 @@
 	</persistence-unit>
              
 <!-- 	For use with JUnit to populate the BD -->	            
-    <persistence-unit name="bankPU_unitTest">
+    <persistence-unit name="carsalePU_unitTest">
 	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-    	<class>ch.hevs.businessobject.Client</class>
+		<!-- Buyer, Owner, Account, Sale, Car, CarBrand, TypeOfFuel -->
+		<class>ch.hevs.businessobject.Buyer</class>
+		<class>ch.hevs.businessobject.Owner</class>
 		<class>ch.hevs.businessobject.Account</class>
+		<class>ch.hevs.businessobject.Sale</class>
+		<class>ch.hevs.businessobject.Car</class>
+		<class>ch.hevs.businessobject.CarBrand</class>
+		<class>ch.hevs.businessobject.TypeOfFuel</class>
 		<properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver"/>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost/DB"/>

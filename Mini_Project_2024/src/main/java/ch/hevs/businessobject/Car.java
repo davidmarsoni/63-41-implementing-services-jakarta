@@ -3,12 +3,9 @@ package ch.hevs.businessobject;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
+@Entity
 public class Car {
     @Id
     @GeneratedValue
@@ -18,17 +15,20 @@ public class Car {
     @ManyToOne()
     private CarBrand carBrand;
 
-    @OneToMany(mappedBy = "cars")
+    @ManyToOne()
     private Owner owner;
+
+    @OneToOne(mappedBy = "car")
+    private Sale sale;
 
     //attributes
     private String model;
     private int year_of_construction;
     private int Kilometers;
     private TypeOfFuel fuel;
-    @Column(nullable = true)
+    @ElementCollection()
     private List<String> colors;
-    @Column(nullable = true)
+    @ElementCollection()
     private List<String> options;
     private DecimalFormat price;
     private boolean isAvailable;
@@ -96,15 +96,6 @@ public class Car {
      */
     public Long getId() {
         return id;
-    }
-
-    /**
-     * Set the ID of the car.
-     * 
-     * @param id the ID to set
-     */
-    public void setId(Long id) {
-        this.id = id;
     }
 
     /**

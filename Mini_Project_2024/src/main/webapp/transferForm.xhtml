@@ -13,7 +13,7 @@
         	<br></br>
         	<h:panelGrid columns="5">
         		<h:outputText value="source: "></h:outputText>
-        		<h:outputText value="client: "></h:outputText>
+        		<h:outputText value="buyer: "></h:outputText>
 	        	<h:selectOneMenu value="#{transferBean.sourceClientName}" valueChangeListener="#{transferBean.updateSourceAccounts}" onchange="submit()">
 	        		<f:selectItems value="#{transferBean.clientNames}"/>
 	        	</h:selectOneMenu>
@@ -22,7 +22,7 @@
 	        		<f:selectItems value="#{transferBean.sourceAccountDescriptions}"/>
 	        	</h:selectOneMenu>
 	        	<h:outputText value="destination: "></h:outputText>
-        		<h:outputText value="client: "></h:outputText>
+        		<h:outputText value="buyer: "></h:outputText>
 	        	<h:selectOneMenu value="#{transferBean.destinationClientName}" valueChangeListener="#{transferBean.updateDestinationAccounts}" onchange="submit()">
 	        		<f:selectItems value="#{transferBean.clientNames}"/>
 	        	</h:selectOneMenu>
