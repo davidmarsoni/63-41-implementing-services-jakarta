@@ -5,10 +5,6 @@ import java.util.List;
 import ch.hevs.businessobject.Account;
 import ch.hevs.businessobject.Buyer;
 import jakarta.ejb.Stateless;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceContextType;
-import jakarta.persistence.Query;
 
 @Stateless
 public class BankBean implements Bank {

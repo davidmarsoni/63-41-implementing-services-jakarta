@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Account {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     private String firstname;

@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 @Table(name = "Owner")
 public class Owner extends Account {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @OneToMany(mappedBy = "owner")
@@ -58,6 +58,28 @@ public class Owner extends Account {
     public void addCar(Car car) {
         this.cars.add(car);
         car.setOwner(this);
+    }
+
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * @return String return the IBAN
+     */
+    public String getIBAN() {
+        return IBAN;
+    }
+
+    /**
+     * @param IBAN the IBAN to set
+     */
+    public void setIBAN(String IBAN) {
+        this.IBAN = IBAN;
     }
 
 }

@@ -3,16 +3,13 @@ package ch.hevs.test;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.util.List;
 
 import ch.hevs.businessobject.*;
 import jakarta.persistence.*;
 import org.junit.Test;
-
 import junit.framework.TestCase;
 
-import javax.sql.rowset.CachedRowSet;
 
 public class PopulateDB extends TestCase {
 
@@ -22,7 +19,7 @@ public class PopulateDB extends TestCase {
 		EntityTransaction tx = null;
 		try {
 			
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("carsalePU_unitTest");
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("carSalePU_unitTest");
 			EntityManager em = emf.createEntityManager();
 			tx = em.getTransaction();
 			tx.begin();
@@ -43,13 +40,12 @@ public class PopulateDB extends TestCase {
 			);
 
 			Buyer b1 = new Buyer(
-					"Paul",
-					"Durand",
-					"Rue de la Gare 12",
-					"079 123 45 67",
-					"durandalpaulie@yahoo-mail.com",
-					Date.valueOf("1990-01-01"),
-					"374245455400126"
+				"Paul",
+				"Durand",
+				"Rue de la Gare 12",
+				"079 123 45 67",
+				"durandalpaulie@yahoo-mail.com",
+				Date.valueOf("1990-01-01")
 			);
 
 			Car car = new Car(
@@ -82,27 +78,7 @@ public class PopulateDB extends TestCase {
 			);
 
 			em.persist(sale);
-
 			tx.commit();
-			/*Buyer c1 = new Buyer("Zinedine", "Zidane");
-			Account a1 = new Account("1000", 10000, c1, "Compte Courant");
-			
-			Buyer c2 = new Buyer("Michel", "Platini");
-			Account a2 = new Account("1001", 20000, c2, "Compte Courant");
-			Account a3 = new Account("1003", 1000, c2, "Livret A");
-	
-			Buyer c3 = new Buyer("Jean-Pierre", "Papin");
-			Account a4 = new Account("1002", 30000, c3, "Compte Courant");
-	
-			em.persist(c1);
-			em.persist(c2);
-			em.persist(c3);
-			
-			em.persist(a1);
-			em.persist(a2);
-			em.persist(a3);
-			em.persist(a4);
-			tx.commit();*/
 
 		} catch (Exception e) {
 			e.printStackTrace();

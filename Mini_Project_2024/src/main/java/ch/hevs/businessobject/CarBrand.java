@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 @Table(name = "CarBrand")
 public class CarBrand {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     //relations

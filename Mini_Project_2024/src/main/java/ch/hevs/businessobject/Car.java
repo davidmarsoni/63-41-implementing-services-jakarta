@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @Entity
 public class Car {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     //relations

@@ -5,8 +5,9 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "Sale")
 public class Sale {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     @OneToOne

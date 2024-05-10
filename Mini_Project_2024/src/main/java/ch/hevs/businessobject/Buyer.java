@@ -10,10 +10,8 @@ import jakarta.persistence.*;
 @Table(name = "Buyer")
 public class Buyer extends Account {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	private Long id;
-
-	private String creditCard;
 
 	@OneToMany(mappedBy = "buyer")
 	private List<Sale> sales;
@@ -21,9 +19,8 @@ public class Buyer extends Account {
 	public Buyer() {
 	}
 
-	public Buyer(String firstname, String lastname, String address, String phone, String email, Date birthdate, String creditCard) {
+	public Buyer(String firstname, String lastname, String address, String phone, String email, Date birthdate) {
 		super(firstname, lastname, address, phone, email, birthdate);
-		this.creditCard = creditCard;
 	}
 
 	/**
@@ -32,22 +29,6 @@ public class Buyer extends Account {
 	 */
 	public Long getId() {
 		return id;
-	}
-
-	/**
-	 * Get the credit card of the buyer.
-	 * @return String return the credit card
-	 */
-	public String getCreditCard() {
-		return creditCard;
-	}
-
-	/**
-	 * Set the credit card of the buyer.
-	 * @param creditCard the credit card to set
-	 */
-	public void setCreditCard(String creditCard) {
-		this.creditCard = creditCard;
 	}
 
 	/**

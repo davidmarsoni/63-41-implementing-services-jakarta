@@ -44,7 +44,7 @@ class Car {
     - availability: String
 }
 Car "1" -- "0..*" Sale : is sold in
-Car "1" -- "1" Brand : has
+Car "0..*" -- "1" Brand : is
 
 class Sale {
     - id: int PK
