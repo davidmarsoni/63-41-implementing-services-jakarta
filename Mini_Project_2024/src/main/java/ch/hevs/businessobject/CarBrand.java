@@ -47,7 +47,6 @@ public class CarBrand {
      * @param description the description of the car brand
      */
     public CarBrand(String name, String country, String website, String description) {
-       
         this.name = name;
         this.country = country;
         this.website = website;

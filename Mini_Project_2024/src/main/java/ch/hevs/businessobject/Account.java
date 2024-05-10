@@ -2,22 +2,23 @@ package ch.hevs.businessobject;
 
 import java.sql.Date;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
+import jakarta.persistence.*;
 
 /**
- * Person
+ * Account
  */
+@Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Account {
+    @Id
+    @GeneratedValue
+    private Long id;
+
     private String firstname;
     private String lastname;
     private String address;
     private String phone;
-
     private String email;
-
     @Column(nullable = true)
     private Date birthdate;
 
@@ -31,6 +32,15 @@ public class Account {
         this.phone = phone;
         this.email = email;
         this.birthdate = birthdate;
+    }
+
+    /**
+     * Get the ID of the person.
+     *
+     * @return Long the id
+     */
+    public Long getId() {
+        return id;
     }
 
     /**

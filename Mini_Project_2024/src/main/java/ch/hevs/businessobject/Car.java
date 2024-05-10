@@ -1,7 +1,6 @@
 package ch.hevs.businessobject;
 
-import java.text.DecimalFormat;
-import java.util.List;
+import java.math.BigDecimal;
 
 import jakarta.persistence.*;
 
@@ -26,11 +25,9 @@ public class Car {
     private int year_of_construction;
     private int Kilometers;
     private TypeOfFuel fuel;
-    @ElementCollection()
-    private List<String> colors;
-    @ElementCollection()
-    private List<String> options;
-    private DecimalFormat price;
+    private String color;
+    private String description;
+    private BigDecimal price;
     private boolean isAvailable;
 
     /**
@@ -49,7 +46,8 @@ public class Car {
      * @param price the price of the car
      * @param isAvailable the availability of the car
      */
-    public Car(String model, int year_of_construction, int Kilometers, TypeOfFuel fuel, DecimalFormat price, boolean isAvailable) {
+    public Car(CarBrand carBrand, String model, int year_of_construction, int Kilometers, TypeOfFuel fuel, BigDecimal price, boolean isAvailable) {
+        this.carBrand = carBrand;
         this.model = model;
         this.year_of_construction = year_of_construction;
         this.Kilometers = Kilometers;
@@ -59,34 +57,26 @@ public class Car {
     }
 
     /**
-     * Constructor for creating a Car object with only the model.
-     * 
-     * @param model the model of the car
-     */
-    /**
      * Constructor for creating a Car object with all attributes.
-     * 
-     * @param id                  the ID of the car
-     * @param model               the model of the car
+     * @param model the model of the car
      * @param year_of_construction the year of construction of the car
-     * @param Kilometers          the number of kilometers driven by the car
-     * @param fuel                the type of fuel used by the car
-     * @param colors              the available colors of the car
-     * @param options             the available options of the car
-     * @param price               the price of the car
-     * @param isAvailable         the availability of the car
+     * @param Kilometers the number of kilometers driven by the car
+     * @param fuel the type of fuel used by the car
+     * @param price the price of the car
+     * @param isAvailable the availability of the car
+     * @param color the available color of the car
+     * @param description the available description of the car
      */
-    public Car(Long id, String model, int year_of_construction, int Kilometers, TypeOfFuel fuel, List<String> colors,
-            List<String> options, DecimalFormat price, boolean isAvailable) {
-        this.id = id;
+    public Car(CarBrand carBrand, String model, int year_of_construction, int Kilometers, TypeOfFuel fuel, BigDecimal price, boolean isAvailable, String color, String description) {
+        this.carBrand = carBrand;
         this.model = model;
         this.year_of_construction = year_of_construction;
         this.Kilometers = Kilometers;
         this.fuel = fuel;
-        this.colors = colors;
-        this.options = options;
         this.price = price;
         this.isAvailable = isAvailable;
+        this.color = color;
+        this.description = description;
     }
 
     /**
@@ -171,55 +161,39 @@ public class Car {
     }
 
     /**
-     * Get the available colors of the car.
+     * Get the available color of the car.
      * 
-     * @return List<String> the available colors of the car
+     * @return String the available color of the car
      */
-    public List<String> getColors() {
-        return colors;
+    public String getColor() {
+        return color;
     }
 
     /**
-     * Set the available colors of the car.
+     * Set the available color of the car.
      * 
-     * @param colors the available colors to set
+     * @param color the available color
      */
-    public void setColors(List<String> colors) {
-        this.colors = colors;
+    public void setColor(String color) {
+        this.color = color;
     }
 
     /**
-     * Add a color to the available colors of the car.
-     * @return void
+     * Get the available description of the car.
+     *
+     * @return String the available description of the car
      */
-    public void addColor(String color) {
-        colors.add(color);
+    public String getDescription() {
+        return description;
     }
 
     /**
-     * Get the available options of the car.
-     * 
-     * @return List<String> the available options of the car
+     * Set the available description of the car.
+     *
+     * @param description the available description to set
      */
-    public List<String> getOptions() {
-        return options;
-    }
-
-    /**
-     * Set the available options of the car.
-     * 
-     * @param options the available options to set
-     */
-    public void setOptions(List<String> options) {
-        this.options = options;
-    }
-
-    /**
-     * Add an option to the available options of the car.
-     * @return void
-     */
-    public void addOption(String option) {
-        options.add(option);
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     /**
@@ -227,7 +201,7 @@ public class Car {
      * 
      * @return DecimalFormat the price of the car
      */
-    public DecimalFormat getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -236,7 +210,7 @@ public class Car {
      * 
      * @param price the price to set
      */
-    public void setPrice(DecimalFormat price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -292,5 +266,41 @@ public class Car {
      */
     public void setOwner(Owner owner) {
         this.owner = owner;
+    }
+
+    /**
+     * Get the sale of the car.
+     *
+     * @return Sale the sale of the car
+     */
+    public Sale getSale() {
+        return sale;
+    }
+
+    /**
+     * Set the sale of the car.
+     *
+     * @param sale the sale to set
+     */
+    public void setSale(Sale sale) {
+        this.sale = sale;
+    }
+
+    /**
+     * Get the availability of the car.
+     *
+     * @return boolean the availability of the car
+     */
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    /**
+     * Set the availability of the car.
+     *
+     * @param available the availability to set
+     */
+    public void setAvailable(boolean available) {
+        isAvailable = available;
     }
 }
