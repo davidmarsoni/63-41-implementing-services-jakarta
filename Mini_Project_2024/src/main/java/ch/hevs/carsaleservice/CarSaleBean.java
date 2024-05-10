@@ -29,5 +29,9 @@ public class CarSaleBean implements CarSale{
         return (List<CarBrand>) em.createQuery("SELECT cb.carBrand FROM CarBrand cb").getResultList();
     }
 
+    @Override
+    public String Test() {
+        return "Test";
+    }
 
 }

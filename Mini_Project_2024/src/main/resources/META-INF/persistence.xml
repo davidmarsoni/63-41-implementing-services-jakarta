@@ -10,11 +10,9 @@
 		<!-- Buyer, Owner, Account, Sale, Car, CarBrand, TypeOfFuel -->
 		<class>ch.hevs.businessobject.Buyer</class>
 		<class>ch.hevs.businessobject.Owner</class>
-		<class>ch.hevs.businessobject.Account</class>
 		<class>ch.hevs.businessobject.Sale</class>
 		<class>ch.hevs.businessobject.Car</class>
 		<class>ch.hevs.businessobject.CarBrand</class>
-		<class>ch.hevs.businessobject.TypeOfFuel</class>
 		<properties>
 			<property name="hibernate.cache.use_second_level_cache" value="true" />
 			<property name="hibernate.cache.use_query_cache" value="true" />
@@ -31,11 +29,9 @@
 		<!-- Buyer, Owner, Account, Sale, Car, CarBrand, TypeOfFuel -->
 		<class>ch.hevs.businessobject.Buyer</class>
 		<class>ch.hevs.businessobject.Owner</class>
-		<class>ch.hevs.businessobject.Account</class>
 		<class>ch.hevs.businessobject.Sale</class>
 		<class>ch.hevs.businessobject.Car</class>
 		<class>ch.hevs.businessobject.CarBrand</class>
-		<class>ch.hevs.businessobject.TypeOfFuel</class>
 		<properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver"/>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:hsqldb:hsql://localhost/DB"/>
