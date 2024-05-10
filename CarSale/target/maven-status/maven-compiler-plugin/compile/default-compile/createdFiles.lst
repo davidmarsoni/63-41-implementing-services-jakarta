@@ -1,0 +1,13 @@
+ch\hevs\businessobject\Buyer.class
+ch\hevs\exception\BankException.class
+ch\hevs\carsaleservice\CarSale.class
+ch\hevs\businessobject\Account.class
+ch\hevs\businessobject\Owner.class
+ch\hevs\businessobject\CarBrand.class
+ch\hevs\bankservice\Bank.class
+ch\hevs\businessobject\Car.class
+ch\hevs\businessobject\TypeOfFuel.class
+ch\hevs\managedbeans\TransferBean.class
+ch\hevs\bankservice\BankBean.class
+ch\hevs\carsaleservice\CarSaleBean.class
+ch\hevs\businessobject\Sale.class
