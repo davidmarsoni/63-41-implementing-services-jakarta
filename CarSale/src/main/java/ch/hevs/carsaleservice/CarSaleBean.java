@@ -3,6 +3,7 @@ package ch.hevs.carsaleservice;
 import ch.hevs.businessobject.CarBrand;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceContextType;
 import jakarta.persistence.Query;
@@ -15,11 +16,9 @@ public class CarSaleBean implements CarSale{
 
     @Override
     public CarBrand getCarBrand(String carbrandName) {
-        
         Query query = em.createQuery("FROM CarBrand c WHERE c.name = :name");
         query.setParameter("name", carbrandName);
-        CarBrand carBrand = (CarBrand) query.getSingleResult();
-        return carBrand;
+        return (CarBrand) query.getSingleResult();
     }
 
     @Override
