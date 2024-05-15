@@ -14,14 +14,13 @@
       <h:form>
         <h:selectOneMenu
           value="#{transferBean.sourceCarBrands}"
-          valueChangeListener="#{transferBean.updateSourceCarBrand}"
           onchange="submit()"
         >
-          <f:selectItems value="#{transferBean.carBrands}" />
+        <f:selectItems value="#{transferBean.carBrands}" var="carBrand" itemLabel="#{carBrand.name}" itemValue="#{carBrand.id}" />
         </h:selectOneMenu>
         <h:selectOneMenu
           value="#{transferBean.sourceOwner}">
-          <f:selectItems value="#{transferBean.owners}" />
+          <f:selectItems value="#{transferBean.owners}" var="owner" itemLabel="#{owner}" itemValue="#{owner.id}" />
         </h:selectOneMenu>
         <br />
         <h:outputLabel
@@ -63,7 +62,7 @@
         />
         <br />
 
-        <h:commandButton value="Submit" action="#{transferBean.AddNewCar}" />
+        <h:commandButton value="Submit" action="#{transferBean.addNewCar}" />
       </h:form>
     </ui:define>
   </ui:composition>

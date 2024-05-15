@@ -34,7 +34,7 @@ public class TransferBean implements Serializable
 	private CarSale carSale;
     // list of car brands and the selected car brand
     private List<CarBrand> carBrands;
-    private CarBrand sourceCarBrands;
+    private String sourceCarBrands;
 
     // list of type of fuel and the selected type of fuel
     private List<TypeOfFuel> fuelOptions;
@@ -42,7 +42,7 @@ public class TransferBean implements Serializable
 
     // list of owners and the selected owner
     private List<Owner> owners;
-    private Owner sourceOwner;
+    private String sourceOwner;
 
     //property for the car 
     private String model;
@@ -68,8 +68,8 @@ public class TransferBean implements Serializable
     }
 
 
-    public void addNewCar() {
-    	
+    public boolean addNewCar() {
+    	return carSale.addCar(sourceCarBrands, model, year_of_construction, kilometers, soucefuel, color, description, price, isAvailable, sourceOwner);
     }
 
 	public String test(){
@@ -109,19 +109,7 @@ public class TransferBean implements Serializable
         return carBrands;
     }
 
-    /**
-     * @return CarBrand return the sourceCarBrands
-     */
-    public CarBrand getSourceCarBrands() {
-        return sourceCarBrands;
-    }
-
-    /**
-     * @param sourceCarBrands the sourceCarBrands to set
-     */
-    public void setSourceCarBrands(CarBrand sourceCarBrands) {
-        this.sourceCarBrands = sourceCarBrands;
-    }
+  
 
 
     /**
@@ -267,17 +255,34 @@ public class TransferBean implements Serializable
         this.owners = owners;
     }
 
+    
+
+
     /**
-     * @return Owner return the sourceOwner
+     * @return String return the sourceCarBrands
      */
-    public Owner getSourceOwner() {
+    public String getSourceCarBrands() {
+        return sourceCarBrands;
+    }
+
+    /**
+     * @param sourceCarBrands the sourceCarBrands to set
+     */
+    public void setSourceCarBrands(String sourceCarBrands) {
+        this.sourceCarBrands = sourceCarBrands;
+    }
+
+    /**
+     * @return String return the sourceOwner
+     */
+    public String getSourceOwner() {
         return sourceOwner;
     }
 
     /**
      * @param sourceOwner the sourceOwner to set
      */
-    public void setSourceOwner(Owner sourceOwner) {
+    public void setSourceOwner(String sourceOwner) {
         this.sourceOwner = sourceOwner;
     }
 

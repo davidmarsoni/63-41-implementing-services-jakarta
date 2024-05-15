@@ -28,6 +28,11 @@ public class CarSaleBean implements CarSale{
     }
 
     @Override
+    public CarBrand getCarBrand(Long id) {
+        return em.find(CarBrand.class, id);
+    }
+
+    @Override
     public List<CarBrand> getCarBrands() {
         Query query = em.createQuery("FROM CarBrand", CarBrand.class);
         List<CarBrand> carBrands = query.getResultList();
@@ -47,11 +52,18 @@ public class CarSaleBean implements CarSale{
     }
 
     @Override
-    public boolean addCar(String carBrand, String model, int yearOfConstruction, int kilometers, String fuel, String color,
-            String description, BigDecimal price, boolean isAvailable, Owner owner) {
+    public Owner getOwner(Long id) {
+        return em.find(Owner.class, id);
+    }
+
+    @Override
+    public boolean addCar(String carBrandString, String model, int yearOfConstruction, int kilometers, String fuel, String color,
+            String description, BigDecimal price, boolean isAvailable, String ownerString) {
         try {
-            CarBrand tmpCarBrand = getCarBrand(carBrand);
+            CarBrand tmpCarBrand = getCarBrand(Long.parseLong(carBrandString));
+            Owner owner = getOwner(Long.parseLong(ownerString));
             TypeOfFuel tmpFuel = TypeOfFuel.valueOf(fuel);
+            
             Car car = new Car(tmpCarBrand,model,yearOfConstruction,kilometers,tmpFuel,price,isAvailable, color, description);
             
             car.setOwner(owner);
@@ -62,6 +74,14 @@ public class CarSaleBean implements CarSale{
             return false;
         }
        
+    }
+
+    private Owner getOwner(Owner ownerString) {
+        Query query = em.createQuery("FROM Owner o WHERE o.firstName =:firstName AND o.lastName =:lastName");
+        query.setParameter("firstName", ownerString);
+        query.setParameter("lastName", ownerString);
+        return (Owner) query.getSingleResult();
+        
     }
 
     

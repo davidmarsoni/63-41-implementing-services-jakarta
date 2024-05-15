@@ -1,4 +1,4 @@
-/CarSale/target/
+**/target/*
 .idea/
 *.bat
 *.lnk
