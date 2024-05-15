@@ -6,6 +6,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import ch.hevs.businessobject.CarBrand;
+import ch.hevs.businessobject.Owner;
 import ch.hevs.carsaleservice.CarSale;
 import jakarta.annotation.ManagedBean;
 import jakarta.annotation.PostConstruct;
@@ -27,8 +28,8 @@ public class TransferBean implements Serializable
 	 */
 	private static final long serialVersionUID = 1L;
 	private CarSale carSale;
-	private CarBrand carBrand;
-   
+    private Owner owner;
+    private CarBrand carBrand;  
     
     @PostConstruct
     public void initialize() throws NamingException {
@@ -52,16 +53,35 @@ public class TransferBean implements Serializable
     }
 
     /**
+     * @return CarBrand return the carBrand
+     */
+    public CarBrand getCarBrand() {
+        return carBrand;
+
+    }
+
+    /**
+     * @param carBrand the carBrand to set
+     */
+    public void setCarBrand(CarBrand carBrand) {
+        this.carBrand = carBrand;
+    }
+
+
+
+    /**
      * @param carSale the carSale to set
      */
     public void setCarSale(CarSale carSale) {
         this.carSale = carSale;
     }
 
+
     /**
-     * @return String return the carBrand
+     * @return Owner return the owner
      */
-    public String getCarBrand() {
-        return carBrand.getName();
+    public String getOwner() {
+        return owner.getFirstname();
     }
+
 }

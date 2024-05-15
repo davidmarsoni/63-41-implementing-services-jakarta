@@ -1,6 +1,7 @@
 package ch.hevs.carsaleservice;
 
 import ch.hevs.businessobject.CarBrand;
+import ch.hevs.businessobject.Owner;
 import jakarta.ejb.Local;
 
 @Local
