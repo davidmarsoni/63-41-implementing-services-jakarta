@@ -43,6 +43,7 @@ public class Car {
      * @param year_of_construction the year of construction of the car
      * @param Kilometers the number of kilometers driven by the car
      * @param fuel the type of fuel used by the car
+     * @param color the available color of the car
      * @param price the price of the car
      * @param isAvailable the availability of the car
      */
@@ -58,6 +59,7 @@ public class Car {
 
     /**
      * Constructor for creating a Car object with all attributes.
+     * @param carBrand the car brand of the car
      * @param model the model of the car
      * @param year_of_construction the year of construction of the car
      * @param Kilometers the number of kilometers driven by the car

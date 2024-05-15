@@ -155,4 +155,8 @@ public class CarBrand {
         cars.add(car);
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

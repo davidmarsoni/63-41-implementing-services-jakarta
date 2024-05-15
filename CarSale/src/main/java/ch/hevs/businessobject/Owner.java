@@ -82,4 +82,8 @@ public class Owner extends Account {
         this.IBAN = IBAN;
     }
 
+    @Override
+    public String toString() {
+        return this.getFullName();
+    }
 }
