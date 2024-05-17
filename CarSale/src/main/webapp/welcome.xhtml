@@ -20,12 +20,15 @@
 	         <h:outputText value="Buy a car" />
 	        </h:commandLink>
         </h:form>
+        <br></br>
+        <h:form>
+	        <h:commandLink action="saleCar">
+	         <h:outputText value="Sale a car" />
+	        </h:commandLink>
+        </h:form>
 
         <br></br>
         
-        <h:selectOneMenu value="#{transferBean.sourceCarBrands}" valueChangeListener="#{transferBean.updateSourceCarBrand}" onchange="submit()">
-            <f:selectItems value="#{transferBean.carBrands}"/>
-        </h:selectOneMenu>
         <h:outputText value="#{transferBean.test()}"></h:outputText>
     </ui:define>
 </ui:composition>
