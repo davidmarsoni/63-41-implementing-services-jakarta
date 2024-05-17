@@ -38,7 +38,15 @@ public class PopulateDB extends TestCase {
 					Date.valueOf("1990-01-01"),
 					"CH4989144487571917565" //fake IBAN that is (provided by http://randomiban.com/?country=Switzerland)
 			);
-
+			Owner o2 = new Owner(
+					"Marie",
+					"Durand",
+					"Place de la commune 1",
+					"079 123 45 67",
+					"marie@google.com",
+					Date.valueOf("1990-01-01"),
+					"CH4989144487571917565" //fake IBAN that is (provided by http://randomiban.com/?country=Switzerland)
+			);
 			Buyer b1 = new Buyer(
 				"Paul",
 				"Durand",
@@ -61,6 +69,7 @@ public class PopulateDB extends TestCase {
 			);
 
 			em.persist(o1);
+			em.persist(o2);
 			em.persist(b1);
 			em.persist(car);
 

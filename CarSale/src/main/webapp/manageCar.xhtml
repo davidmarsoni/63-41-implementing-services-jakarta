@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+>
+  <h:head>
+    <!-- You can include additional CSS or JS files here -->
+  </h:head>
+  <ui:composition template="/WEB-INF/templates/BasicTemplate.xhtml">
+    <ui:define name="content">
+      <h1><h:outputText value="Add a new car" styleClass="h1" /></h1>
+      <h:outputText id="info" value="#{transferBean.info}" />
+      <br />
+      <!-- modify this to have the submit method and correct the tgh world-->
+      <h:form>
+        <h:outputLabel
+          for="Owner"
+          value="Owner :"
+        />
+        <h:selectOneMenu
+          id="Owner"
+          value="#{transferBean.sourceOwner}"
+          valueChangeListener="#{transferBean.updateSourceOwner}"
+          onchange="submit()"
+        >
+          <f:selectItems value="#{transferBean.owners}"
+          var="owner"
+          itemLabel="#{owner.fullName}"
+          itemValue="#{owner.id}"/>
+        </h:selectOneMenu>
+      </h:form>
+      <br />
+      <br />
+      <br />
+      <h:form>
+        <h:outputLabel
+          for="CarBrand"
+          value="Car Brand:"
+        />
+        <h:selectOneMenu  id="CarBrand" value="#{transferBean.sourceCarBrands}">
+          <f:selectItems
+            value="#{transferBean.carBrands}"
+            var="carBrand"
+            itemLabel="#{carBrand.name}"
+            itemValue="#{carBrand.id}"
+          />
+        </h:selectOneMenu>
+        <br />
+        <h:outputLabel
+          for="year_of_construction"
+          value="Year of Construction:"
+        />
+        <h:inputText
+          id="year_of_construction"
+          value="#{transferBean.year_of_construction}"
+        />
+        <br />
+
+        <h:outputLabel for="model" value="Model:" />
+        <h:inputText id="model" value="#{transferBean.model}" />
+        <br />
+        <h:outputLabel for="kilometers" value="Kilometers:" />
+        <h:inputText id="kilometers" value="#{transferBean.kilometers}" />
+        <br />
+
+        <h:outputLabel for="fuel" value="Type of Fuel:" />
+        <h:selectOneMenu id="fuel" value="#{transferBean.soucefuel}">
+          <f:selectItems value="#{transferBean.fuelOptions}" />
+        </h:selectOneMenu>
+        <br />
+
+        <h:outputLabel for="color" value="Color:" />
+        <h:inputText id="color" value="#{transferBean.color}" />
+        <br />
+
+        <h:outputLabel for="description" value="Description:" />
+        <h:inputText id="description" value="#{transferBean.description}" />
+        <br />
+
+        <h:outputLabel for="price" value="Price:" />
+        <h:inputText id="price" value="#{transferBean.price}" />
+        <br />
+
+        <h:outputLabel for="isAvailable" value="Is Available:" />
+        <h:selectBooleanCheckbox
+          id="isAvailable"
+          value="#{transferBean.isAvailable}"
+        />
+        <br />
+        <h:commandButton value="Submit" action="#{transferBean.addNewCar}">
+          <f:ajax render="add_info carList" execute="@form" />
+        </h:commandButton>
+      </h:form>
+      <h:outputText id="add_info" value="#{transferBean.add_info}" />
+
+      <h1><h:outputText value="Car List" styleClass="h1"></h:outputText></h1>
+      <!-- add a remove button for each car -->
+      <!-- show only the model of the car-->
+      <h:form id="carList">
+        <h:dataTable
+          value="#{transferBean.cars}"
+          var="car"
+          rendered="#{not empty transferBean.cars}"
+        >
+          <h:column>
+            <f:facet name="header">Model</f:facet>
+            <h:outputText value="#{car.model}" />
+          </h:column>
+          <h:column>
+            <f:facet name="header">Year of Construction</f:facet>
+            <h:outputText value="#{car.year_of_construction}" />
+          </h:column>
+          <h:column>
+            <f:facet name="header">Kilometers</f:facet>
+            <h:outputText value="#{car.kilometers}" />
+          </h:column>
+          <h:column>
+            <f:facet name="header">Fuel</f:facet>
+            <h:outputText value="#{car.fuel}" />
+          </h:column>
+          <h:column>
+            <f:facet name="header">Color</f:facet>
+            <h:outputText value="#{car.color}" />
+          </h:column>
+          <h:column>
+            <f:facet name="header">Description</f:facet>
+            <h:outputText value="#{car.description}" />
+          </h:column>
+          <h:column>
+            <f:facet name="header">Price</f:facet>
+            <h:outputText value="#{car.price}" />
+          </h:column>
+          <h:column>
+            <f:facet name="header">Is Available</f:facet>
+            <h:outputText value="#{car.isAvailable}" />
+          </h:column>
+          <h:column>
+            <f:facet name="header">Remove</f:facet>
+            <h:commandButton
+              value="Remove"
+              action="#{transferBean.removeCar(car)}"
+            >
+              <f:ajax
+                event="click"
+                listener="#{transferBean.updateCarList}"
+                execute="@this"
+                render="remove_info carList"
+              />
+            </h:commandButton>
+          </h:column>
+        </h:dataTable>
+      </h:form>
+      <h:outputText id="remove_info" value="#{transferBean.remove_info}" />
+    </ui:define>
+  </ui:composition>
+</html>

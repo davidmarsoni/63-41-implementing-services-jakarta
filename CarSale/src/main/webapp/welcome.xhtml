@@ -10,17 +10,23 @@
     <ui:define name="content">
         <h:outputLabel value="Links"></h:outputLabel>
         <h:form>
-	        <h:commandLink action="addCar">
-	         <h:outputText value="Add a new car" />
+	        <h:commandLink action="manageCar">
+	         <h:outputText value="manage Cars" />
 	        </h:commandLink>
         </h:form>
         <br></br>
-        
+        <h:form>
+	        <h:commandLink action="carBuy">
+	         <h:outputText value="Buy a car" />
+	        </h:commandLink>
+        </h:form>
+
         <br></br>
         
         <h:selectOneMenu value="#{transferBean.sourceCarBrands}" valueChangeListener="#{transferBean.updateSourceCarBrand}" onchange="submit()">
             <f:selectItems value="#{transferBean.carBrands}"/>
         </h:selectOneMenu>
+        <h:outputText value="#{transferBean.test()}"></h:outputText>
     </ui:define>
 </ui:composition>
 </html>

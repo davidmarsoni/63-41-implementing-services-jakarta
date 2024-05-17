@@ -57,8 +57,37 @@ public class CarSaleBean implements CarSale{
     }
 
     @Override
-    public boolean addCar(String carBrandString, String model, int yearOfConstruction, int kilometers, String fuel, String color,
+    public String addCar(String carBrandString, String model, int yearOfConstruction, int kilometers, String fuel, String color,
             String description, BigDecimal price, boolean isAvailable, String ownerString) {
+        // verify all the parameters and return a String with the error message
+        if (carBrandString == null || carBrandString.isEmpty()) {
+            return "Car brand is missing";
+        }
+        if (model == null || model.isEmpty()) {
+            return "Model is missing";
+        }
+        if (yearOfConstruction <= 1850){
+            return "Year of construction must be greater than 1850";
+        }
+        if (kilometers < 0) {
+            return "Negative kilometers are not allowed";
+        }
+        if (fuel == null || fuel.isEmpty()) {
+            return "Fuel is missing";
+        }
+        if (color == null || color.isEmpty()) {
+            return "Color is missing";
+        }
+        if (description == null || description.isEmpty()) {
+            return "Description is missing";
+        }
+        if (price == null) {
+            return "Price is missing";
+        }
+        if (ownerString == null || ownerString.isEmpty()) {
+            return "Owner is missing";
+        }
+        
         try {
             CarBrand tmpCarBrand = getCarBrand(Long.parseLong(carBrandString));
             Owner owner = getOwner(Long.parseLong(ownerString));
@@ -69,9 +98,9 @@ public class CarSaleBean implements CarSale{
             car.setOwner(owner);
             em.persist(car);
             
-            return true;
+            return "Car added";
         } catch (NoResultException e) {
-            return false;
+            return "Car brand or owner not found";
         }
        
     }
@@ -83,6 +112,27 @@ public class CarSaleBean implements CarSale{
         return (Owner) query.getSingleResult();
         
     }
+
+    @Override
+    public List<Car> getCars(Long ownerID) {
+        Query query = em.createQuery("FROM Car c WHERE c.owner.id =:id");
+        query.setParameter("id", ownerID);
+        List<Car> cars = query.getResultList();
+        return cars;
+    }
+
+    @Override
+    public String removeCar(Long carID) {
+        Car car = em.find(Car.class, carID);
+        if (car == null) {
+            return "Car not found";
+        }
+        em.remove(car);
+        return "Car successfully removed";
+        
+    }
+
+    
 
     
 

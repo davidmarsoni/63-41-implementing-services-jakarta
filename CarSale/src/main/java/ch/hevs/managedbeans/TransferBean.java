@@ -7,6 +7,7 @@ import java.util.List;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import ch.hevs.businessobject.Car;
 import ch.hevs.businessobject.CarBrand;
 import ch.hevs.businessobject.Owner;
 import ch.hevs.businessobject.TypeOfFuel;
@@ -14,6 +15,8 @@ import ch.hevs.carsaleservice.CarSale;
 import jakarta.annotation.ManagedBean;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.component.UISelectOne;
+import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.faces.event.ValueChangeEvent;
 import jakarta.inject.Named;
 
@@ -25,13 +28,13 @@ import jakarta.inject.Named;
 @ManagedBean
 @SessionScoped
 @Named("transferBean")
-public class TransferBean implements Serializable
-{
+public class TransferBean implements Serializable {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private CarSale carSale;
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private CarSale carSale;
+    // === carManagment ===
     // list of car brands and the selected car brand
     private List<CarBrand> carBrands;
     private String sourceCarBrands;
@@ -44,7 +47,7 @@ public class TransferBean implements Serializable
     private List<Owner> owners;
     private String sourceOwner;
 
-    //property for the car 
+    // property for the car
     private String model;
     private int year_of_construction;
     private int kilometers;
@@ -52,39 +55,68 @@ public class TransferBean implements Serializable
     private String description;
     private BigDecimal price;
     private boolean isAvailable;
-    
+
+    private String info;
+    private String add_info;
+    private String remove_info;
+    // list of cars owned by the owner
+    private List<Car> cars;
+    private Long selectedOwner;
+
 
     @PostConstruct
     public void initialize() throws NamingException {
-    	
-    	// use JNDI to inject reference to bank EJB
-		InitialContext ctx = new InitialContext();
-		carSale = (CarSale) ctx.lookup("java:global/CarSale-0.0.1-SNAPSHOT/CarSaleBean!ch.hevs.carsaleservice.CarSale");
-    	//get the list of car brands
+
+        // use JNDI to inject reference to bank EJB
+        InitialContext ctx = new InitialContext();
+        carSale = (CarSale) ctx.lookup("java:global/CarSale-0.0.1-SNAPSHOT/CarSaleBean!ch.hevs.carsaleservice.CarSale");
+        // get the list of car brands
         carBrands = carSale.getCarBrands();
         owners = carSale.getOwners();
-        //get all the choices of the enum TypeOfFuel
+        selectedOwner = owners.get(0).getId();
+        cars = carSale.getCars(selectedOwner);
+        
+
+        // get all the choices of the enum TypeOfFuel
         fuelOptions = List.of(TypeOfFuel.values());
+        info = "Owner selected: " +  owners.get(0).getFullName();
     }
 
-
-    public boolean addNewCar() {
-    	return carSale.addCar(sourceCarBrands, model, year_of_construction, kilometers, soucefuel, color, description, price, isAvailable, sourceOwner);
+    public void addNewCar() {
+        String message = carSale.addCar(sourceCarBrands, model, year_of_construction, kilometers, soucefuel, color,
+                description, price, isAvailable, sourceOwner);
+        updateCarList();
+        setAdd_info(message);
     }
 
-	public String test(){
-		return carSale.test();
-	}
+    public void removeCar(Car car) {
+        String message = carSale.removeCar(car.getId());
+        updateCarList();
+        setRemove_info(message);
+    }
+
+    public String test() {
+        return carSale.test();
+    }
+
+    public void updateSourceOwner(ValueChangeEvent event) {
+        // get the new value from the event
+        String newValue = event.getNewValue().toString();
+        setSelectedOwner(Long.parseLong(newValue));
+        setInfo("Owner selected: " + carSale.getOwner(getSelectedOwner()).getFullName());
+        // update the list of cars owned by the owner
+        updateCarList();
+    }
+
+    public void updateCarList() {
+        cars = carSale.getCars(selectedOwner);
+    }
 
     /**
      * @return CarSale return the carSale
      */
     public CarSale getCarSale() {
         return carSale;
-    }
-
-    public void updateSourceCarBrands(ValueChangeEvent event) {
-    	//TODO
     }
 
 
@@ -108,9 +140,6 @@ public class TransferBean implements Serializable
     public List<CarBrand> getCarBrands() {
         return carBrands;
     }
-
-  
-
 
     /**
      * @return String return the model
@@ -153,8 +182,6 @@ public class TransferBean implements Serializable
     public void setKilometers(int kilometers) {
         this.kilometers = kilometers;
     }
-
-   
 
     /**
      * @return String return the color
@@ -226,7 +253,6 @@ public class TransferBean implements Serializable
         this.fuelOptions = fuelOptions;
     }
 
-
     /**
      * @return String return the soucefuel
      */
@@ -255,9 +281,6 @@ public class TransferBean implements Serializable
         this.owners = owners;
     }
 
-    
-
-
     /**
      * @return String return the sourceCarBrands
      */
@@ -284,6 +307,76 @@ public class TransferBean implements Serializable
      */
     public void setSourceOwner(String sourceOwner) {
         this.sourceOwner = sourceOwner;
+    }
+
+    /**
+     * @param cars the cars to set
+     */
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
+    }
+
+    /**
+     * @return List<Car> return the cars
+     */
+    public List<Car> getCars() {
+        return cars;
+    }
+
+    /**
+     * @return String return the add_info
+     */
+    public String getAdd_info() {
+        return add_info;
+    }
+
+    /**
+     * @param add_info the add_info to set
+     */
+    public void setAdd_info(String add_info) {
+        this.add_info = add_info;
+    }
+    /**
+     * @return String return the remove_info
+     */
+    public String getRemove_info() {
+        return remove_info;
+    }
+
+    /**
+     * @param remove_info the remove_info to set
+     */
+    public void setRemove_info(String remove_info) {
+        this.remove_info = remove_info;
+    }
+
+
+    /**
+     * @return String return the info
+     */
+    public String getInfo() {
+        return info;
+    }
+
+    /**
+     * @param info the info to set
+     */
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    /**
+     * @return Long return the selectedOwner
+     */
+    public Long getSelectedOwner() {
+        return selectedOwner;
+    }
+
+    /**
+     * @param selectedOwner the selectedOwner to set
+     */
+    public void setSelectedOwner(Long selectedOwner) {
+        this.selectedOwner = selectedOwner;
     }
 
 }
