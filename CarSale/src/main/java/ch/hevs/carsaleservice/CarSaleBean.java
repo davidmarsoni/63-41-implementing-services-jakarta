@@ -75,12 +75,6 @@ public class CarSaleBean implements CarSale{
         if (fuel == null || fuel.isEmpty()) {
             return "Fuel is missing";
         }
-        if (color == null || color.isEmpty()) {
-            return "Color is missing";
-        }
-        if (description == null || description.isEmpty()) {
-            return "Description is missing";
-        }
         if (price == null) {
             return "Price is missing";
         }

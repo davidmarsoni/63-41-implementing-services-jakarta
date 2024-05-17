@@ -1,15 +1,36 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
 >
-    <ui:composition template="/WEB-INF/templates/BasicTemplate.xhtml">
-        <ui:define name="content">
-                <h1><h:outputText value="Sale a car" styleClass="h1" /></h1>
-                <h:outputText id="info" value="#{transferBean.info}" />
-        </ui:define>
-    </ui:composition>
+  <ui:composition template="/WEB-INF/templates/BasicTemplate.xhtml">
+    <ui:define name="content">
+        <f:event type="preRenderView" listener="#{transferBean.saleCarPreload}" />
+      <div class="container">
+        <h1><h:outputText value="Sale a car" styleClass="h1" /></h1>
+      </div>
+      <div class="toast align-items-center position-fixed top-0 end-0 mt-3 me-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            <h:outputText id="info" value="#{transferBean.info}" />
+          </div>
+          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+      <h:inputHidden id="infoHidden" value="#{transferBean.info}" />
+      <script>
+        document.addEventListener("DOMContentLoaded", (event) => {
+          const toastEl = document.querySelector(".toast");
+          const toastBootstrap = new bootstrap.Toast(toastEl);
+          const info = document.getElementById("infoHidden").value;
+          if (info !== "") {
+            toastBootstrap.show();
+          }
+        });
+      </script>
+    </ui:define>
+  </ui:composition>
 </html>

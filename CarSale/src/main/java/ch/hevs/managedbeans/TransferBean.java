@@ -57,8 +57,6 @@ public class TransferBean implements Serializable {
     private boolean isAvailable;
 
     private String info;
-    private String add_info;
-    private String remove_info;
     // list of cars owned by the owner
     private List<Car> cars;
     private Long selectedOwner;
@@ -75,28 +73,32 @@ public class TransferBean implements Serializable {
         owners = carSale.getOwners();
         selectedOwner = owners.get(0).getId();
         cars = carSale.getCars(selectedOwner);
-        
-
         // get all the choices of the enum TypeOfFuel
         fuelOptions = List.of(TypeOfFuel.values());
-        info = "Owner selected: " +  owners.get(0).getFullName();
     }
 
+    // === preloading ===
+    public void manageCarPreload() {
+        info = "Owner selected: " +  owners.get(0).getFullName();
+    }
+    public void saleCarPreload() {
+        info = "Hello saleCarPreload";
+    }
+    public void buyCarPreload() {
+        info = "Hello BuyCarPreload";
+    }
+
+    // === car management ===
     public void addNewCar() {
         String message = carSale.addCar(sourceCarBrands, model, year_of_construction, kilometers, soucefuel, color,
                 description, price, isAvailable, sourceOwner);
         updateCarList();
-        setAdd_info(message);
+        setInfo(message);
     }
-
     public void removeCar(Car car) {
         String message = carSale.removeCar(car.getId());
         updateCarList();
-        setRemove_info(message);
-    }
-
-    public String test() {
-        return carSale.test();
+        setInfo(message);
     }
 
     public void updateSourceOwner(ValueChangeEvent event) {
@@ -111,6 +113,18 @@ public class TransferBean implements Serializable {
     public void updateCarList() {
         cars = carSale.getCars(selectedOwner);
     }
+    // === car sale ===
+
+    // === car buy ===
+
+    
+    // === test ===
+    public String test() {
+        return carSale.test();
+    }
+
+    // === getters and setters ===
+    //#region getters and setters
 
     /**
      * @return CarSale return the carSale
@@ -118,7 +132,6 @@ public class TransferBean implements Serializable {
     public CarSale getCarSale() {
         return carSale;
     }
-
 
     /**
      * @param carSale the carSale to set
@@ -324,34 +337,6 @@ public class TransferBean implements Serializable {
     }
 
     /**
-     * @return String return the add_info
-     */
-    public String getAdd_info() {
-        return add_info;
-    }
-
-    /**
-     * @param add_info the add_info to set
-     */
-    public void setAdd_info(String add_info) {
-        this.add_info = add_info;
-    }
-    /**
-     * @return String return the remove_info
-     */
-    public String getRemove_info() {
-        return remove_info;
-    }
-
-    /**
-     * @param remove_info the remove_info to set
-     */
-    public void setRemove_info(String remove_info) {
-        this.remove_info = remove_info;
-    }
-
-
-    /**
      * @return String return the info
      */
     public String getInfo() {
@@ -379,4 +364,5 @@ public class TransferBean implements Serializable {
         this.selectedOwner = selectedOwner;
     }
 
+    //#endregion getters and setters
 }
