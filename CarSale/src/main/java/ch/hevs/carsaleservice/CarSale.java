@@ -16,9 +16,13 @@ public interface CarSale{
     String test();
     List<CarBrand> getCarBrands();
     List<Car> getCars(Long ownerID);
+    Car getCar(Long id);
     List<Owner> getOwners();
     Owner getOwner(Long id);
 
-    String addCar(String carBrand,String model, int yearOfConstruction, int kilometers, String fuel, String color, String description, BigDecimal price, boolean isAvailable, String owner);
-    String removeCar(Long carID);
+    String addCar(Long carBrandId,String model, int yearOfConstruction, int kilometers, String fuel, String color, String description, BigDecimal price, boolean isAvailable, Long ownerId);
+    String removeCar(Long carId);
+    String updateCar(Long selectedCarId, Long carBrandId, String model, int year_of_construction, int kilometers,
+            String soucefuel, String color, String description, BigDecimal price, boolean isAvailable,
+            Long ownerId);
 }

@@ -15,8 +15,6 @@ import ch.hevs.carsaleservice.CarSale;
 import jakarta.annotation.ManagedBean;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
-import jakarta.faces.component.UISelectOne;
-import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.faces.event.ValueChangeEvent;
 import jakarta.inject.Named;
 
@@ -35,9 +33,15 @@ public class TransferBean implements Serializable {
     private static final long serialVersionUID = 1L;
     private CarSale carSale;
     // === carManagment ===
+
+    private Long selectedCar;
+    // list of cars owned by the owner
+    private List<Car> cars;
+    private Long selectedOwner;
+
     // list of car brands and the selected car brand
     private List<CarBrand> carBrands;
-    private String sourceCarBrands;
+    private Long sourceCarBrands;
 
     // list of type of fuel and the selected type of fuel
     private List<TypeOfFuel> fuelOptions;
@@ -45,7 +49,7 @@ public class TransferBean implements Serializable {
 
     // list of owners and the selected owner
     private List<Owner> owners;
-    private String sourceOwner;
+    private Long sourceOwner;
 
     // property for the car
     private String model;
@@ -57,9 +61,11 @@ public class TransferBean implements Serializable {
     private boolean isAvailable;
 
     private String info;
-    // list of cars owned by the owner
-    private List<Car> cars;
-    private Long selectedOwner;
+    private String formState;
+    
+
+    // === car buy ===
+    //filtered list of car based on the brand selected
 
 
     @PostConstruct
@@ -71,30 +77,65 @@ public class TransferBean implements Serializable {
         // get the list of car brands
         carBrands = carSale.getCarBrands();
         owners = carSale.getOwners();
-        selectedOwner = owners.get(0).getId();
-        cars = carSale.getCars(selectedOwner);
         // get all the choices of the enum TypeOfFuel
         fuelOptions = List.of(TypeOfFuel.values());
     }
 
     // === preloading ===
     public void manageCarPreload() {
-        info = "Owner selected: " +  owners.get(0).getFullName();
+        if(getFormState() == null){
+            setFormState("Add");
+        }
+
+        if(selectedOwner == null){
+            selectedOwner = owners.get(0).getId();
+        }
+        updateCarList();
     }
-    public void saleCarPreload() {
-        info = "Hello saleCarPreload";
-    }
+ 
     public void buyCarPreload() {
-        info = "Hello BuyCarPreload";
+        setInfo("Hello from buyCarPreload");
     }
 
     // === car management ===
-    public void addNewCar() {
-        String message = carSale.addCar(sourceCarBrands, model, year_of_construction, kilometers, soucefuel, color,
-                description, price, isAvailable, sourceOwner);
+    public void addUpdateCar() {
+        String message = "";
+        if(selectedCar == null) {
+            message = carSale.addCar(sourceCarBrands, model, year_of_construction, kilometers, soucefuel, color,
+                description, price, isAvailable, selectedOwner);
+        } else {
+            message = carSale.updateCar(selectedCar, sourceCarBrands, model, year_of_construction, kilometers, soucefuel, color,
+                description, price, isAvailable, selectedOwner);
+        }
+
+        if(message.isEmpty() && selectedCar == null) {
+            message = "Car successfully added";
+        }
+        if(message.isEmpty() && selectedCar != null) {
+            message = "Car successfully updated";
+        }
         updateCarList();
-        setInfo(message);
+        setInfo(message);//+" : ("+model+" "+year_of_construction+" "+kilometers+" "+soucefuel+" "+color+" "+description+" "+price+" "+isAvailable+" "+selectedOwner+")");
+        if(message.equals("Car successfully added") || message.equals("Car successfully updated")) {
+            resetFields();
+        }
+        
     }
+
+    private void resetFields() {
+        model = "";
+        year_of_construction = 0;
+        kilometers = 0;
+        color = "";
+        description = "";
+        price = new BigDecimal(0);
+        isAvailable = false;
+        sourceCarBrands = carBrands.get(0).getId();
+        soucefuel = fuelOptions.get(0).toString();
+        selectedCar = null;
+        setFormState(null);
+    }
+
     public void removeCar(Car car) {
         String message = carSale.removeCar(car.getId());
         updateCarList();
@@ -103,17 +144,42 @@ public class TransferBean implements Serializable {
 
     public void updateSourceOwner(ValueChangeEvent event) {
         // get the new value from the event
-        String newValue = event.getNewValue().toString();
-        setSelectedOwner(Long.parseLong(newValue));
-        setInfo("Owner selected: " + carSale.getOwner(getSelectedOwner()).getFullName());
+        selectedOwner = (Long) event.getNewValue();
         // update the list of cars owned by the owner
         updateCarList();
+        // set the info message
+        setInfo("Owner selected: " + carSale.getOwner(getSelectedOwner()).getFullName());
     }
 
     public void updateCarList() {
         cars = carSale.getCars(selectedOwner);
     }
-    // === car sale ===
+    public void prepareEditCar(Car car) {
+        Car carToEdit = carSale.getCar(car.getId());
+
+        if(carToEdit == null) {
+            setInfo("Car not found");
+            return;
+        }
+
+        model = carToEdit.getModel();
+        year_of_construction = carToEdit.getYear_of_construction();
+        kilometers = carToEdit.getKilometers();
+        color = carToEdit.getColor();
+        description = carToEdit.getDescription();
+        price = carToEdit.getPrice();
+        isAvailable = carToEdit.isIsAvailable();
+        // set the selected car brand
+        sourceCarBrands = carToEdit.getCarBrand().getId();
+        // set the selected type of fuel
+        soucefuel = carToEdit.getFuel().toString();
+
+        selectedCar = carToEdit.getId();
+        selectedOwner = carToEdit.getOwner().getId();
+        setFormState("Edit");
+        setInfo("Selected car successfully loaded for editing");
+
+    }
 
     // === car buy ===
 
@@ -294,34 +360,7 @@ public class TransferBean implements Serializable {
         this.owners = owners;
     }
 
-    /**
-     * @return String return the sourceCarBrands
-     */
-    public String getSourceCarBrands() {
-        return sourceCarBrands;
-    }
-
-    /**
-     * @param sourceCarBrands the sourceCarBrands to set
-     */
-    public void setSourceCarBrands(String sourceCarBrands) {
-        this.sourceCarBrands = sourceCarBrands;
-    }
-
-    /**
-     * @return String return the sourceOwner
-     */
-    public String getSourceOwner() {
-        return sourceOwner;
-    }
-
-    /**
-     * @param sourceOwner the sourceOwner to set
-     */
-    public void setSourceOwner(String sourceOwner) {
-        this.sourceOwner = sourceOwner;
-    }
-
+    
     /**
      * @param cars the cars to set
      */
@@ -364,5 +403,62 @@ public class TransferBean implements Serializable {
         this.selectedOwner = selectedOwner;
     }
 
+   
+    /**
+     * @return Long return the selectedCar
+     */
+    public Long getSelectedCar() {
+        return selectedCar;
+    }
+
+    /**
+     * @param selectedCar the selectedCar to set
+     */
+    public void setSelectedCar(Long selectedCar) {
+        this.selectedCar = selectedCar;
+    }
+
+    /**
+     * @return String return the formState
+     */
+    public String getFormState() {
+        return formState;
+    }
+
+    /**
+     * @param formState the formState to set
+     */
+    public void setFormState(String formState) {
+        this.formState = formState;
+    }
+    
+
+    /**
+     * @return Long return the sourceCarBrands
+     */
+    public Long getSourceCarBrands() {
+        return sourceCarBrands;
+    }
+
+    /**
+     * @param sourceCarBrands the sourceCarBrands to set
+     */
+    public void setSourceCarBrands(Long sourceCarBrands) {
+        this.sourceCarBrands = sourceCarBrands;
+    }
+
+    /**
+     * @return Long return the sourceOwner
+     */
+    public Long getSourceOwner() {
+        return sourceOwner;
+    }
+
+    /**
+     * @param sourceOwner the sourceOwner to set
+     */
+    public void setSourceOwner(Long sourceOwner) {
+        this.sourceOwner = sourceOwner;
+    }
     //#endregion getters and setters
 }
