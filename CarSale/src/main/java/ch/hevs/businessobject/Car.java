@@ -2,7 +2,13 @@ package ch.hevs.businessobject;
 
 import java.math.BigDecimal;
 
+import javax.management.loading.PrivateClassLoader;
+
+
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Car {
@@ -17,8 +23,8 @@ public class Car {
     @ManyToOne()
     private Owner owner;
 
-    @OneToOne(mappedBy = "car")
-    private Sale sale;
+    @OneToMany(mappedBy = "car")
+    private List<Sale> sales;
 
     //attributes
     private String model;
@@ -34,6 +40,7 @@ public class Car {
      * Constructor for creating a Car object with only the model.
      */
     public Car() {
+        this.sales = new ArrayList<Sale>();
     }
 
     /**
@@ -55,6 +62,7 @@ public class Car {
         this.fuel = fuel;
         this.price = price;
         this.isAvailable = isAvailable;
+        this.sales = new ArrayList<Sale>();
     }
 
     /**
@@ -270,23 +278,6 @@ public class Car {
         this.owner = owner;
     }
 
-    /**
-     * Get the sale of the car.
-     *
-     * @return Sale the sale of the car
-     */
-    public Sale getSale() {
-        return sale;
-    }
-
-    /**
-     * Set the sale of the car.
-     *
-     * @param sale the sale to set
-     */
-    public void setSale(Sale sale) {
-        this.sale = sale;
-    }
 
     /**
      * Get the availability of the car.
@@ -304,5 +295,35 @@ public class Car {
      */
     public void setAvailable(boolean available) {
         isAvailable = available;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * @return List<Sale> return the sales
+     */
+    public List<Sale> getSales() {
+        return sales;
+    }
+
+    /**
+     * @param sales the sales to set
+     */
+    public void setSales(List<Sale> sales) {
+        this.sales = sales;
+    }
+
+    /**
+     * Add a sale to the list of sales of the car.
+     * 
+     * @param sale the sale to add
+     */
+    public void addSale(Sale sale) {
+        this.sales.add(sale);
     }
 }

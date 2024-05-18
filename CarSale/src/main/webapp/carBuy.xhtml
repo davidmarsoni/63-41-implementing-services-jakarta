@@ -11,15 +11,164 @@
       <f:event type="preRenderView" listener="#{transferBean.buyCarPreload}" />
       <div class="container">
         <h1><h:outputText value="Buy a car" styleClass="h1" /></h1>
-      </div>
-      <div class="toast align-items-center position-fixed top-0 end-0 mt-3 me-3" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-          <div class="toast-body">
-            <h:outputText id="info" value="#{transferBean.info}" />
-          </div>
-          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+         
+        <h:form class="form-group mt-3">
+          <h3><h:outputText for="Owner" value="Select the buyer :" /></h3>
+          <h:selectOneMenu
+            id="Owner"
+            valueChangeListener="#{transferBean.updateSourceBuyer}"
+            onchange="submit()"
+            styleClass="form-select"
+          >
+            <f:selectItems
+              value="#{transferBean.buyers}"
+              var="buyer"
+              itemLabel="#{buyer.fullName}"
+              itemValue="#{buyer.id}"
+            />
+          </h:selectOneMenu>
+        </h:form>
+        <h:form class="form-group  mt-3">
+          <h5><h:outputText for="Owner" value="Filter the cars by a brand :" /></h5>
+          <h:selectOneMenu
+            id="Owner"
+            valueChangeListener="#{transferBean.updateSourceCarBrand}"
+            onchange="submit()"
+            styleClass="form-select"
+          >
+            <f:selectItem itemLabel="-------" itemValue="-1000" />
+            <f:selectItems
+              value="#{transferBean.carBrands}"
+              var="carBrand"
+              itemLabel="#{carBrand.name}"
+              itemValue="#{carBrand.id}"
+            />
+          </h:selectOneMenu>
+        </h:form>
+        <h1 class="h1 mt-3"><h:outputText value="Car List"></h:outputText></h1>
+        <h:form id="carList">
+        <div class="col-3">
+            <h:outputLabel
+                for="price"
+                value="Desired price :"
+                styleClass="form-label"
+            />
+            <h:inputText
+                id="price"
+                value="#{transferBean.price}"
+                styleClass="form-control"
+                type="number"
+            >
+            </h:inputText>
         </div>
+          <div class="table-responsive-xxl">
+            <h:dataTable
+              value="#{transferBean.cars}"
+              var="car"
+              rendered="#{not empty transferBean.cars}"
+              styleClass="table table-striped table-hover mt-3"
+            >
+              <h:column class="align-middle">
+                <f:facet name="header">
+                  <h:outputText value="Model" class="text-center" />
+                </f:facet>
+                <h:outputText value="#{car.model}" class="text-center" />
+              </h:column>
+              <h:column class="align-middle">
+                <f:facet name="header">
+                  <h:outputText value="Brand" class="text-center" />
+                </f:facet>
+                <h:outputText value="#{car.carBrand.name}" class="text-center" />
+              </h:column>
+              <h:column class="align-middle">
+                <f:facet name="header">
+                  <h:outputText
+                    value="Year of Construction"
+                    class="text-center"
+                  />
+                </f:facet>
+                <h:outputText
+                  value="#{car.year_of_construction}"
+                  class="text-center"
+                />
+              </h:column>
+              <h:column class="align-middle">
+                <f:facet name="header">
+                  <h:outputText value="Kilometers" class="text-center" />
+                </f:facet>
+                <h:outputText value="#{car.kilometers}" class="text-center" />
+              </h:column>
+              <h:column class="align-middle">
+                <f:facet name="header">
+                  <h:outputText value="Fuel" class="text-center" />
+                </f:facet>
+                <h:outputText value="#{car.fuel}" class="text-center" />
+              </h:column>
+              <h:column class="align-middle">
+                <f:facet name="header">
+                  <h:outputText value="Color" class="text-center" />
+                </f:facet>
+                <h:outputText value="#{car.color}" class="text-center" />
+              </h:column>
+              <h:column class="align-middle">
+                <f:facet name="header">
+                  <h:outputText value="Description" class="text-center" />
+                </f:facet>
+                <h:outputText value="#{car.description}" class="text-center" />
+              </h:column>
+              <h:column class="align-middle">
+                <f:facet name="header">
+                  <h:outputText value="Price" class="text-center" />
+                </f:facet>
+                <h:outputText value="#{car.price}" class="text-center" />
+              </h:column>
+              <h:column class="align-middle">
+                <f:facet name="header">
+                  <h:outputText value="Is Available" class="text-center" />
+                </f:facet>
+                <div class="form-check">
+                  <h:selectBooleanCheckbox
+                    id="isAvailable"
+                    value="#{car.isAvailable}"
+                    styleClass="form-check-input"
+                    disabled="true"
+                  />
+                </div>
+              </h:column>
+              <h:column class="align-middle">
+                <f:facet name="header">
+                  <h:outputText value="Buy" class="text-center" />
+                </f:facet>
+                <h:commandButton
+                  value="Buy"
+                  action="#{transferBean.buyCar(car)}"
+                  styleClass="btn btn-success"
+                >
+                  <f:ajax event="click" execute="@this" render="info" />
+                </h:commandButton>
+              </h:column>
+            </h:dataTable>
+          </div>
+        </h:form>
       </div>
+      <div
+      class="toast align-items-center position-fixed top-0 end-0 mt-3 me-3 w-30"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="d-flex">
+        <div class="toast-body">
+          <h:outputText id="info" value="#{transferBean.info}" />
+        </div>
+        <button
+          type="button"
+          class="btn-close me-2 m-auto"
+          data-bs-dismiss="toast"
+          aria-label="Close"
+        ></button>
+      </div>
+    </div>
       <h:inputHidden id="infoHidden" value="#{transferBean.info}" />
       <script>
         document.addEventListener("DOMContentLoaded", (event) => {

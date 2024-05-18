@@ -20,6 +20,7 @@ public class Owner extends Account {
     private String IBAN;
 
     public Owner() {
+        this.cars = new ArrayList<Car>();
     }
 
     public Owner(String firstname, String lastname, String address, String phone, String email,Date birthdate, String IBAN) {

@@ -1,45 +1,71 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
 >
-<body>
+  <body>
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">CarSale</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <h:form class="nav-link text-decoration-none">
-                    <h:commandLink action="welcome" styleClass="text-decoration-none">
-                        <h:outputText value="Home" />
-                    </h:commandLink>
-                </h:form>
-              </li>
-              <li class="nav-item">
-               
-                <h:form class="nav-link text-decoration-none">
-                    <h:commandLink action="manageCar" styleClass="text-decoration-none">
-                        <h:outputText value="manage Cars" />
-                    </h:commandLink>
-                </h:form>
-              </li>
-              <li class="nav-item">
-                <h:form class="nav-link text-decoration-none">
-                    <h:commandLink action="carBuy" styleClass="text-decoration-none">
-                        <h:outputText value="Buy a car" />
-                    </h:commandLink>
-                </h:form>
-              </li>
-            </ul>
-          </div>
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">CarSale</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <h:link
+                outcome="welcome"
+                styleClass="nav-link text-decoration-none"
+              >
+                <h:outputText value="Home" />
+              </h:link>
+            </li>
+            <li class="nav-item">
+              <h:link
+                outcome="carManage"
+                styleClass="nav-link text-decoration-none"
+              >
+                <h:outputText value="manage Cars" />
+              </h:link>
+            </li>
+            <li class="nav-item">
+              <h:link
+                outcome="carBuy"
+                styleClass="nav-link text-decoration-none"
+              >
+                <h:outputText value="Buy a car" />
+              </h:link>
+            </li>
+            <li class="nav-item">
+              <h:link
+                outcome="buyerDashboard"
+                styleClass="nav-link text-decoration-none"
+              >
+                <h:outputText value="Buyer dashboard" />
+              </h:link>
+            </li>
+            <li class="nav-item">
+              <h:link
+                outcome="ownerDashboard"
+                styleClass="nav-link text-decoration-none"
+              >
+                <h:outputText value="Owner dashboard" />
+              </h:link>
+            </li>
+          </ul>
         </div>
-      </nav>
-</body>
+      </div>
+    </nav>
+  </body>
 </html>

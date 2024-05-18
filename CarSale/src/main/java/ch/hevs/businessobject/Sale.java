@@ -1,5 +1,8 @@
 package ch.hevs.businessobject;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -10,22 +13,22 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
-    @OneToOne
+    @ManyToOne()
     private Car car;
 
-    @ManyToOne
+    @ManyToOne()
     private Buyer buyer;
 
     //attributes
-    private String date;
-    private String price;
+    private LocalDate date;
+    private BigDecimal price;
     private String paymentMethod;
-    private String paymentStatus;
+    private PaymentStatus paymentStatus;
 
     public Sale() {
     }
 
-    public Sale(Car car, Buyer buyer, String date, String price, String paymentMethod, String paymentStatus) {
+    public Sale(Car car, Buyer buyer, LocalDate date, BigDecimal price, String paymentMethod, PaymentStatus paymentStatus) {
         this.car = car;
         this.buyer = buyer;
         this.date = date;
@@ -75,39 +78,41 @@ public class Sale {
     }
 
     /**
-     * Get the date of the sale.
-     * @return String return the date
+     * @param id the id to set
      */
-    public String getDate() {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * @return LocalDate return the date
+     */
+    public LocalDate getDate() {
         return date;
     }
 
     /**
-     * Set the date of the sale.
      * @param date the date to set
      */
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
     /**
-     * Get the price of the sale.
-     * @return String return the price
+     * @return BigDecimal return the price
      */
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
     /**
-     * Set the price of the sale.
      * @param price the price to set
      */
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
     /**
-     * Get the payment method of the sale.
      * @return String return the paymentMethod
      */
     public String getPaymentMethod() {
@@ -115,7 +120,6 @@ public class Sale {
     }
 
     /**
-     * Set the payment method of the sale.
      * @param paymentMethod the paymentMethod to set
      */
     public void setPaymentMethod(String paymentMethod) {
@@ -123,18 +127,17 @@ public class Sale {
     }
 
     /**
-     * Get the payment status of the sale.
-     * @return String return the paymentStatus
+     * @return PaymentStatus return the paymentStatus
      */
-    public String getPaymentStatus() {
+    public PaymentStatus getPaymentStatus() {
         return paymentStatus;
     }
 
     /**
-     * Set the payment status of the sale.
      * @param paymentStatus the paymentStatus to set
      */
-    public void setPaymentStatus(String paymentStatus) {
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
+
 }

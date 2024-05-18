@@ -7,6 +7,7 @@ import java.util.List;
 
 import ch.hevs.businessobject.*;
 import jakarta.persistence.*;
+
 import org.junit.Test;
 import junit.framework.TestCase;
 
@@ -56,6 +57,15 @@ public class PopulateDB extends TestCase {
 				Date.valueOf("1990-01-01")
 			);
 
+			Buyer b2 = new Buyer(
+				"Jacques",
+				"Dupont",
+				"Place de la commune 1",
+				"079 123 45 67",
+				"jack@gmail.com",
+				Date.valueOf("1990-01-01")
+			);
+
 			Car car = new Car(
 					carBrands.get(0),
 					"Ford Fiesta 2020",
@@ -71,22 +81,23 @@ public class PopulateDB extends TestCase {
 			em.persist(o1);
 			em.persist(o2);
 			em.persist(b1);
+			em.persist(b2);
 			em.persist(car);
 
 			o1.addCar(car);
 
 			em.persist(o1);
 
-			Sale sale = new Sale(
+			/*Sale sale = new Sale(
 					car,
 					b1,
-					"2022-01-01",
-					"20000",
+					LocalDate.now(),
+					BigDecimal.valueOf(20000),
 					"Credit Card",
-					"Paid"
+					PaymentStatus.PAID
 			);
 
-			em.persist(sale);
+			em.persist(sale);*/
 			tx.commit();
 
 		} catch (Exception e) {

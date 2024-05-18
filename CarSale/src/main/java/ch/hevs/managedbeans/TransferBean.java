@@ -7,9 +7,11 @@ import java.util.List;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import ch.hevs.businessobject.Buyer;
 import ch.hevs.businessobject.Car;
 import ch.hevs.businessobject.CarBrand;
 import ch.hevs.businessobject.Owner;
+import ch.hevs.businessobject.Sale;
 import ch.hevs.businessobject.TypeOfFuel;
 import ch.hevs.carsaleservice.CarSale;
 import jakarta.annotation.ManagedBean;
@@ -32,12 +34,11 @@ public class TransferBean implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     private CarSale carSale;
-    // === carManagment ===
 
+    // === carManagment ===
     private Long selectedCar;
     // list of cars owned by the owner
     private List<Car> cars;
-    private Long selectedOwner;
 
     // list of car brands and the selected car brand
     private List<CarBrand> carBrands;
@@ -49,7 +50,7 @@ public class TransferBean implements Serializable {
 
     // list of owners and the selected owner
     private List<Owner> owners;
-    private Long sourceOwner;
+    private Long selectedOwner;
 
     // property for the car
     private String model;
@@ -59,14 +60,21 @@ public class TransferBean implements Serializable {
     private String description;
     private BigDecimal price;
     private boolean isAvailable;
-
-    private String info;
-    private String formState;
     
+    private String formState;
 
     // === car buy ===
-    //filtered list of car based on the brand selected
+    private List<Buyer> buyers;
+    private Long selectedBuyer;
 
+    private Long selectedCarBrand;
+    //=== buyer dashnoard ===
+
+    //=== owner dashboard ===
+    private List<Sale> sales;
+
+    // === info ===
+    private String info;
 
     @PostConstruct
     public void initialize() throws NamingException {
@@ -77,12 +85,18 @@ public class TransferBean implements Serializable {
         // get the list of car brands
         carBrands = carSale.getCarBrands();
         owners = carSale.getOwners();
+        buyers = carSale.getBuyers();
+
         // get all the choices of the enum TypeOfFuel
         fuelOptions = List.of(TypeOfFuel.values());
     }
 
     // === preloading ===
-    public void manageCarPreload() {
+    public void carManagePreload() {
+        if(owners.isEmpty()) {
+            setInfo("No owners found please add an owner first");
+            return;
+        }
         if(getFormState() == null){
             setFormState("Add");
         }
@@ -94,7 +108,42 @@ public class TransferBean implements Serializable {
     }
  
     public void buyCarPreload() {
-        setInfo("Hello from buyCarPreload");
+        if(buyers.isEmpty()) {
+            setInfo("No buyers found please add a buyer first");
+            return;
+        }
+
+        if(selectedBuyer == null){
+            selectedBuyer = buyers.get(0).getId();
+        }
+        filterCarList();
+    }
+
+    public void ownerDashboardPreload() {
+        if(owners.isEmpty()) {
+            setInfo("No owners found please add an owner first");
+            return;
+        }
+        if(getFormState() == null){
+            setFormState("Add");
+        }
+
+        if(selectedOwner == null){
+            selectedOwner = owners.get(0).getId();
+        }
+        updateSaleListByOwner();
+    }
+
+    public void buyerDashboardPreload() {
+        if(buyers.isEmpty()) {
+            setInfo("No buyers found please add a buyer first");
+            return;
+        }
+        if(selectedBuyer == null){
+            selectedBuyer = buyers.get(0).getId();
+        }
+
+        sales = carSale.getSalesByBuyer(selectedBuyer);
     }
 
     // === car management ===
@@ -122,20 +171,6 @@ public class TransferBean implements Serializable {
         
     }
 
-    private void resetFields() {
-        model = "";
-        year_of_construction = 0;
-        kilometers = 0;
-        color = "";
-        description = "";
-        price = new BigDecimal(0);
-        isAvailable = false;
-        sourceCarBrands = carBrands.get(0).getId();
-        soucefuel = fuelOptions.get(0).toString();
-        selectedCar = null;
-        setFormState(null);
-    }
-
     public void removeCar(Car car) {
         String message = carSale.removeCar(car.getId());
         updateCarList();
@@ -144,8 +179,8 @@ public class TransferBean implements Serializable {
 
     public void updateSourceOwner(ValueChangeEvent event) {
         // get the new value from the event
-        selectedOwner = (Long) event.getNewValue();
-        // update the list of cars owned by the owner
+        selectedOwner = Long.parseLong(event.getNewValue().toString());
+        //update the list of cars owned by the owner
         updateCarList();
         // set the info message
         setInfo("Owner selected: " + carSale.getOwner(getSelectedOwner()).getFullName());
@@ -154,6 +189,7 @@ public class TransferBean implements Serializable {
     public void updateCarList() {
         cars = carSale.getCars(selectedOwner);
     }
+
     public void prepareEditCar(Car car) {
         Car carToEdit = carSale.getCar(car.getId());
 
@@ -180,10 +216,96 @@ public class TransferBean implements Serializable {
         setInfo("Selected car successfully loaded for editing");
 
     }
+    
+    private void resetFields() {
+        model = "";
+        year_of_construction = 0;
+        kilometers = 0;
+        color = "";
+        description = "";
+        price = new BigDecimal(0);
+        isAvailable = false;
+        sourceCarBrands = carBrands.get(0).getId();
+        soucefuel = fuelOptions.get(0).toString();
+        selectedCar = null;
+        setFormState(null);
+    }
 
     // === car buy ===
+    public void updateSourceBuyer(ValueChangeEvent event) {
+        // get the new value from the event
+        selectedBuyer = Long.parseLong(event.getNewValue().toString());
+        // set the info message
+        setInfo("Buyer selected: " + carSale.getBuyer(getSelectedBuyer()).getFullName());
+    }
 
+    public void updateSourceCarBrand(ValueChangeEvent event) {
+        // get the new value from the event
+        selectedCarBrand = Long.parseLong(event.getNewValue().toString());
+        //equals -1000 means no car brand selected
+        if(selectedCarBrand == -1000L) {
+            selectedCarBrand = null;
+        }
+        // set the info message
+        setInfo("Car brand selected: ");
+        if(selectedCarBrand != null) {
+            setInfo(getInfo() + carSale.getCarBrand(selectedCarBrand).getName());
+        } else {
+            setInfo(getInfo() + "All car brands");
+        }
+    }
+
+    public void filterCarList() {
+        cars = carSale.getFilterdCars(selectedCarBrand,null,0,0,0,0,null,null,null,null);
+    }
     
+    public void buyCar(Car car) {
+        String message = carSale.buyCar(car.getId(), selectedBuyer,price);
+        filterCarList();
+        setInfo(message);
+    }
+    // === buyer dashboard ===
+    public void updateBuyer(ValueChangeEvent event) {
+        // get the new value from the event
+        selectedBuyer = Long.parseLong(event.getNewValue().toString());
+
+        updateSaleListByBuyer();
+        // set the info message
+        setInfo("Buyer selected: " + carSale.getBuyer(getSelectedBuyer()).getFullName());
+    }
+
+    public void updateSaleListByBuyer(){
+        sales = carSale.getSalesByBuyer(selectedBuyer);
+    }
+
+    // === owner dashboard ===
+
+    public void acceptSale(Long saleId) {
+        String message = carSale.acceptSale(saleId);
+        updateSaleListByOwner();
+        setInfo(message);
+    }
+
+    public void refuseSale(Long saleId) {
+        String message = carSale.refuseSale(saleId);
+        updateSaleListByOwner();
+        setInfo(message);
+    }
+
+    public void updateOwner(ValueChangeEvent event) {
+        // get the new value from the event
+        selectedOwner = Long.parseLong(event.getNewValue().toString());
+
+        updateSaleListByOwner();
+        // set the info message
+        setInfo("Owner selected: " + carSale.getOwner(getSelectedOwner()).getFullName());
+    }
+
+    public void updateSaleListByOwner(){
+        sales = carSale.getSalesByOwner(selectedOwner);
+    }
+
+
     // === test ===
     public String test() {
         return carSale.test();
@@ -448,17 +570,62 @@ public class TransferBean implements Serializable {
     }
 
     /**
-     * @return Long return the sourceOwner
+     * @return List<Buyer> return the buyers
      */
-    public Long getSourceOwner() {
-        return sourceOwner;
+    public List<Buyer> getBuyers() {
+        return buyers;
     }
 
     /**
-     * @param sourceOwner the sourceOwner to set
+     * @param buyers the buyers to set
      */
-    public void setSourceOwner(Long sourceOwner) {
-        this.sourceOwner = sourceOwner;
+    public void setBuyers(List<Buyer> buyers) {
+        this.buyers = buyers;
     }
+
+    /**
+     * @return Long return the selectedBuyer
+     */
+    public Long getSelectedBuyer() {
+        return selectedBuyer;
+    }
+
+    /**
+     * @param selectedBuyer the selectedBuyer to set
+     */
+    public void setSelectedBuyer(Long selectedBuyer) {
+        this.selectedBuyer = selectedBuyer;
+    }
+
+   
+
+    /**
+     * @return Long return the selectedCarBrand
+     */
+    public Long getSelectedCarBrand() {
+        return selectedCarBrand;
+    }
+
+    /**
+     * @param selectedCarBrand the selectedCarBrand to set
+     */
+    public void setSelectedCarBrand(Long selectedCarBrand) {
+        this.selectedCarBrand = selectedCarBrand;
+    }
+
+    /**
+     * @param sales the sales to set
+     */
+    public void setSales(List<Sale> sales) {
+        this.sales = sales;
+    }
+
+    /**
+     * @return List<Sale> return the sales
+     */
+    public List<Sale> getSales() {
+        return sales;
+    }
+
     //#endregion getters and setters
 }
