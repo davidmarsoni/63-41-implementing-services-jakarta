@@ -50,6 +50,7 @@
     </web-resource-collection>
     <auth-constraint>
       <role-name>owner</role-name>
+      <role-name>admin</role-name>
     </auth-constraint>
   </security-constraint>
   
@@ -61,6 +62,7 @@
     </web-resource-collection>
     <auth-constraint>
       <role-name>buyer</role-name>
+      <role-name>admin</role-name>
     </auth-constraint>
   </security-constraint>
   
@@ -72,6 +74,7 @@
     <auth-constraint>
       <role-name>owner</role-name>
       <role-name>buyer</role-name>
+      <role-name>admin</role-name>
     </auth-constraint>
   </security-constraint>
   <login-config>
@@ -86,5 +89,8 @@
     <description>buyer</description>
     <role-name>buyer</role-name>
   </security-role>
-
+  <security-role>
+    <description>admin</description>
+    <role-name>admin</role-name>
+  </security-role>
 </web-app>

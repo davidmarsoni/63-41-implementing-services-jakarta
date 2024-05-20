@@ -16,8 +16,6 @@ import ch.hevs.businessobject.TypeOfFuel;
 import ch.hevs.carsaleservice.CarSale;
 import jakarta.annotation.ManagedBean;
 import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Resource;
-import jakarta.ejb.SessionContext;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.event.ValueChangeEvent;
 import jakarta.inject.Named;
@@ -93,9 +91,29 @@ public class TransferBean implements Serializable {
         fuelOptions = List.of(TypeOfFuel.values());
     }
 
+    // === navigation ===
+    public String navigateToOwnerDashboard() {
+        clearInfo();
+        return "ownerDashboard";
+    }
+    
+    public String navigateToBuyerDashboard() {
+        clearInfo();
+        return "buyerDashboard";
+    }
+
+    public String navigateToManageCars(){
+        clearInfo();
+        return "manageCars";
+    }
+
+    public String navigateToCarsBuy(){
+        clearInfo();
+        return "carsBuy";
+    }
 
     // === preloading ===
-    public void carManagePreload() {
+    public void manageCarsPreload() {
         if(owners.isEmpty()) {
             setInfo("No owners found please add an owner first");
             return;
@@ -110,7 +128,7 @@ public class TransferBean implements Serializable {
         updateCarList();
     }
  
-    public void buyCarPreload() {
+    public void carsBuyPreload() {
         if(buyers.isEmpty()) {
             setInfo("No buyers found please add a buyer first");
             return;
@@ -147,6 +165,11 @@ public class TransferBean implements Serializable {
         }
 
         sales = carSale.getSalesByBuyer(selectedBuyer);
+    }
+
+    // === info ===
+    public void clearInfo() {
+        setInfo(null);
     }
 
     // === user security ===

@@ -25,7 +25,7 @@ import jakarta.persistence.Query;
 
 
 @Stateless
-@RolesAllowed(value = {"owner","buyer"})
+@RolesAllowed(value = {"owner","buyer","admin"})
 public class CarSaleBean implements CarSale{
     @PersistenceContext(unitName = "carSalePU", type=PersistenceContextType.TRANSACTION)
 	private EntityManager em;

@@ -32,43 +32,48 @@
               </h:link>
             </li>
             <li class="nav-item">
-              <h:link
-                outcome="carManage"
-                styleClass="nav-link text-decoration-none"
-              >
-                <h:outputText value="Manage car" />
-              </h:link>
+              <h:form>
+                <h:commandButton
+                  value="Cars Manage"
+                  action="#{transferBean.navigateToManageCars}"
+                  styleClass="btn btn-link nav-link text-decoration-none"
+                />
+              </h:form>
             </li>
             <li class="nav-item">
-              <h:link
-                outcome="carBuy"
-                styleClass="nav-link text-decoration-none"
-              >
-                <h:outputText value="Buy a car" />
-              </h:link>
+              <h:form>
+                <h:commandButton
+                  value="Buy a car"
+                  action="#{transferBean.navigateToCarsBuy}"
+                  styleClass="btn btn-link nav-link text-decoration-none"
+                />  
+              </h:form>
             </li>
             <li class="nav-item">
-              <h:link
-                outcome="buyerDashboard"
-                styleClass="nav-link text-decoration-none"
-              >
-                <h:outputText value="Buyer dashboard" />
-              </h:link>
+              <h:form>
+                <h:commandButton
+                  value="Buyer Dashboard"
+                  action="#{transferBean.navigateToBuyerDashboard}"
+                  styleClass="btn btn-link nav-link text-decoration-none"
+                />
+              </h:form>
             </li>
             <li class="nav-item">
-              <h:link
-                outcome="ownerDashboard"
-                styleClass="nav-link text-decoration-none"
-              >
-                <h:outputText value="Owner dashboard" />
-              </h:link>
+              <h:form>
+                <h:commandButton
+                  value="Owner Dashboard"
+                  action="#{transferBean.navigateToOwnerDashboard}"
+                  styleClass="btn btn-link nav-link text-decoration-none"
+                />
+              </h:form>
             </li>
           </ul>
           <div class="d-flex" style="margin-left: auto">
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
                 <a class="nav-link">
-                  hi &#x1F44B;,  <h:outputText value="#{transferBean.currentUser()}" />
+                  hi &#x1F44B;,
+                  <h:outputText value="#{transferBean.currentUser()}" />
                 </a>
               </li>
             </ul>
