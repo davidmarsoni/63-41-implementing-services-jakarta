@@ -36,7 +36,7 @@
                 outcome="carManage"
                 styleClass="nav-link text-decoration-none"
               >
-                <h:outputText value="manage Cars" />
+                <h:outputText value="Manage car" />
               </h:link>
             </li>
             <li class="nav-item">
@@ -64,6 +64,15 @@
               </h:link>
             </li>
           </ul>
+          <div class="d-flex" style="margin-left: auto">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link">
+                  hi &#x1F44B;,  <h:outputText value="#{transferBean.currentUser()}" />
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </nav>

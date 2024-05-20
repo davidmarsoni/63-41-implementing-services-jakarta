@@ -11,6 +11,9 @@ import ch.hevs.businessobject.Owner;
 import ch.hevs.businessobject.PaymentStatus;
 import ch.hevs.businessobject.Sale;
 import ch.hevs.businessobject.TypeOfFuel;
+import jakarta.annotation.Resource;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.ejb.SessionContext;
 import jakarta.ejb.Stateless;
 import jakarta.ejb.TransactionAttribute;
 import jakarta.ejb.TransactionAttributeType;
@@ -22,13 +25,37 @@ import jakarta.persistence.Query;
 
 
 @Stateless
+@RolesAllowed(value = {"owner","buyer"})
 public class CarSaleBean implements CarSale{
     @PersistenceContext(unitName = "carSalePU", type=PersistenceContextType.TRANSACTION)
 	private EntityManager em;
 
+    @Resource
+	private SessionContext ctx;
+    
     @Override
     public String test() {
         return "Hello from CarSaleBean";
+    }
+
+    @Override 
+    public boolean isUserAdmin() {
+        return ctx.isCallerInRole("admin");
+    }
+
+    @Override 
+    public boolean isUserOwner() {
+        return ctx.isCallerInRole("owner");
+    }
+
+    @Override 
+    public boolean isUserBuyer() {
+        return ctx.isCallerInRole("buyer");
+    }
+
+    @Override
+    public String getCurrentUser() {
+        return ctx.getCallerPrincipal().getName();
     }
 
     @Override
@@ -148,7 +175,7 @@ public class CarSaleBean implements CarSale{
 
     @Override
     public List<Sale> getSalesByOwner(Long ownerId) {
-        Query query = em.createQuery("FROM Sale s WHERE s.car.owner.id =:id");
+        Query query = em.createQuery("FROM Sale s WHERE s.owner.id =:id");
         query.setParameter("id", ownerId);
         List<Sale> sales = query.getResultList();
         return sales;
@@ -171,9 +198,17 @@ public class CarSaleBean implements CarSale{
 
     @Override
     public List<Owner> getOwners() {
-        Query query = em.createQuery("FROM Owner", Owner.class);
-        List<Owner> owners = query.getResultList();
-        return owners;
+        if (isUserOwner()) {
+            Query query = em.createQuery("FROM Owner o WHERE o.username =:username");
+            query.setParameter("username", getCurrentUser());
+            Owner owner = (Owner) query.getSingleResult();
+            return List.of(owner);
+        } else if (ctx.isCallerInRole("admin")) {
+            Query query = em.createQuery("FROM Owner", Owner.class);
+            List<Owner> owners = query.getResultList();
+            return owners;
+        }
+        return null;
     }
 
     @Override
@@ -183,9 +218,17 @@ public class CarSaleBean implements CarSale{
 
     @Override
     public List<Buyer> getBuyers() {
-        Query query = em.createQuery("FROM Buyer", Buyer.class);
-        List<Buyer> buyers = query.getResultList();
-        return buyers;
+        if(isUserBuyer()) {
+            Query query = em.createQuery("FROM Buyer b WHERE b.username =:username");
+            query.setParameter("username", getCurrentUser());
+            Buyer buyer = (Buyer) query.getSingleResult();
+            return List.of(buyer);
+        } else if(ctx.isCallerInRole("admin")) {
+            Query query = em.createQuery("FROM Buyer", Buyer.class);
+            List<Buyer> buyers = query.getResultList();
+            return buyers;
+        }
+        return null;
     }
 
     @Override
@@ -303,6 +346,7 @@ public class CarSaleBean implements CarSale{
         Sale sale = new Sale();
         sale.setCar(car);
         sale.setBuyer(buyer);
+        sale.setOwner(car.getOwner());
         sale.setPrice(price);
         sale.setPaymentMethod("Credit Card");
         sale.setPaymentStatus(PaymentStatus.PENDING);

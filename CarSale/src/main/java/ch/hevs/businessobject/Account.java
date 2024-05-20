@@ -14,6 +14,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
+    private String username;
     private String firstname;
     private String lastname;
     private String address;
@@ -25,7 +26,8 @@ public class Account {
     public Account() {
     }
 
-    public Account(String firstname, String lastname, String address, String phone, String email, Date birthdate) {
+    public Account(String username, String firstname, String lastname, String address, String phone, String email, Date birthdate) {
+        this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
         this.address = address;
@@ -160,4 +162,26 @@ public class Account {
         return "Person [address=" + address + ", birthdate=" + birthdate + ", email=" + email + ", firstname="
                 + firstname + ", lastname=" + lastname + ", phone=" + phone + "]";
     }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * @return String return the username
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * @param username the username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
 }

@@ -15,6 +15,11 @@ public interface CarSale{
 
     String test();
 
+    boolean isUserAdmin();
+    boolean isUserOwner();
+    boolean isUserBuyer();
+    String getCurrentUser();
+
     List<CarBrand> getCarBrands();
     CarBrand getCarBrand(Long id);
     CarBrand getCarBrand(String carbrandName);

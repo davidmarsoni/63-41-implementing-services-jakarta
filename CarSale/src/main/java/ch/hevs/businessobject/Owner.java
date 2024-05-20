@@ -16,17 +16,23 @@ public class Owner extends Account {
     @OneToMany(mappedBy = "owner")
     private List<Car> cars;
 
+
+    @OneToMany(mappedBy = "owner")
+    private List<Sale> sales;
+
     //attributes
     private String IBAN;
 
     public Owner() {
         this.cars = new ArrayList<Car>();
+        this.sales = new ArrayList<Sale>();         
     }
 
-    public Owner(String firstname, String lastname, String address, String phone, String email,Date birthdate, String IBAN) {
-        super(firstname, lastname, address, phone, email, birthdate);
+    public Owner(String username,String firstname, String lastname, String address, String phone, String email,Date birthdate, String IBAN) {
+        super(username,firstname, lastname, address, phone, email, birthdate);
         this.IBAN = IBAN;
         this.cars = new ArrayList<Car>();
+        this.sales = new ArrayList<Sale>();
     }
 
     /**
@@ -86,5 +92,28 @@ public class Owner extends Account {
     @Override
     public String toString() {
         return this.getFullName();
+    }
+
+    /**
+     * @return List<Sale> return the sales
+     */
+    public List<Sale> getSales() {
+        return sales;
+    }
+
+    /**
+     * @param sales the sales to set
+     */
+    public void setSales(List<Sale> sales) {
+        this.sales = sales;
+    }
+
+    /**
+     * Add a sale to the list of sales of the owner.
+     * @param sale
+     */
+    public void addSale(Sale sale) {
+        this.sales.add(sale);
+        sale.setOwner(this);
     }
 }

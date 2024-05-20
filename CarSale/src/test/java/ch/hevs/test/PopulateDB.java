@@ -31,6 +31,7 @@ public class PopulateDB extends TestCase {
 			// populate the database with some data
 
 			Owner o1 = new Owner(
+					"JeanDupont",
 					"Jean",
 					"Dupont",
 					"Rue de la Gare 12",
@@ -40,6 +41,7 @@ public class PopulateDB extends TestCase {
 					"CH4989144487571917565" //fake IBAN that is (provided by http://randomiban.com/?country=Switzerland)
 			);
 			Owner o2 = new Owner(
+					"MarieDurand",
 					"Marie",
 					"Durand",
 					"Place de la commune 1",
@@ -49,6 +51,7 @@ public class PopulateDB extends TestCase {
 					"CH4989144487571917565" //fake IBAN that is (provided by http://randomiban.com/?country=Switzerland)
 			);
 			Buyer b1 = new Buyer(
+				"PaulDurand",
 				"Paul",
 				"Durand",
 				"Rue de la Gare 12",
@@ -58,6 +61,7 @@ public class PopulateDB extends TestCase {
 			);
 
 			Buyer b2 = new Buyer(
+				"JacquesDupont",
 				"Jacques",
 				"Dupont",
 				"Place de la commune 1",

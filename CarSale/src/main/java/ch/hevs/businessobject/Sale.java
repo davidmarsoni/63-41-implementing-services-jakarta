@@ -19,6 +19,9 @@ public class Sale {
     @ManyToOne()
     private Buyer buyer;
 
+    @ManyToOne()
+    private Owner owner;
+
     //attributes
     private LocalDate date;
     private BigDecimal price;
@@ -28,9 +31,10 @@ public class Sale {
     public Sale() {
     }
 
-    public Sale(Car car, Buyer buyer, LocalDate date, BigDecimal price, String paymentMethod, PaymentStatus paymentStatus) {
+    public Sale(Car car, Buyer buyer,Owner owner, LocalDate date, BigDecimal price, String paymentMethod, PaymentStatus paymentStatus) {
         this.car = car;
         this.buyer = buyer;
+        this.owner = owner;
         this.date = date;
         this.price = price;
         this.paymentMethod = paymentMethod;
@@ -138,6 +142,21 @@ public class Sale {
      */
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+
+    /**
+     * @return Owner return the owner
+     */
+    public Owner getOwner() {
+        return owner;
+    }
+
+    /**
+     * @param owner the owner to set
+     */
+    public void setOwner(Owner owner) {
+        this.owner = owner;
     }
 
 }
