@@ -22,6 +22,7 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceContextType;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 
 @Stateless
@@ -59,15 +60,27 @@ public class CarSaleBean implements CarSale{
     }
 
     @Override
+    public String getCurrentUserRole() {
+        if(isUserAdmin()) {
+            return "admin";
+        } else if(isUserOwner()) {
+            return "owner";
+        } else if(isUserBuyer()) {
+            return "buyer";
+        }
+        return "unknown";
+    }
+
+    @Override
     public List<Car> getCars() {
-        Query query = em.createQuery("FROM Car", Car.class);
+        TypedQuery<Car> query = em.createQuery("FROM Car", Car.class);
         List<Car> cars = query.getResultList();
         return cars;
     }
 
     @Override
     public List<Car> getCars(Long ownerID) {
-        Query query = em.createQuery("FROM Car c WHERE c.owner.id =:id");
+        TypedQuery<Car> query = em.createQuery("FROM Car c WHERE c.owner.id =:id", Car.class);
         query.setParameter("id", ownerID);
         List<Car> cars = query.getResultList();
         return cars;
@@ -112,7 +125,7 @@ public class CarSaleBean implements CarSale{
             queryStr += " and c.price <=:max_price";
         }
 
-        Query query = em.createQuery(queryStr, Car.class);
+        TypedQuery<Car> query = em.createQuery(queryStr, Car.class);
 
         if (carBrandId != null) {
             query.setParameter("carBrandId", carBrandId);
@@ -156,7 +169,7 @@ public class CarSaleBean implements CarSale{
 
     @Override
     public List<CarBrand> getCarBrands() {
-        Query query = em.createQuery("FROM CarBrand", CarBrand.class);
+        TypedQuery<CarBrand> query = em.createQuery("FROM CarBrand", CarBrand.class);
         List<CarBrand> carBrands = query.getResultList();
         return carBrands;
     }
@@ -168,14 +181,14 @@ public class CarSaleBean implements CarSale{
 
     @Override
     public CarBrand getCarBrand(String carbrandName) {
-        Query query = em.createQuery("FROM CarBrand c WHERE c.name =:name");
+        TypedQuery<CarBrand> query = em.createQuery("FROM CarBrand c WHERE c.name =:name", CarBrand.class);
         query.setParameter("name", carbrandName);
         return (CarBrand) query.getSingleResult();
     }
 
     @Override
     public List<Sale> getSalesByOwner(Long ownerId) {
-        Query query = em.createQuery("FROM Sale s WHERE s.owner.id =:id");
+        TypedQuery<Sale> query = em.createQuery("FROM Sale s WHERE s.owner.id =:id", Sale.class);
         query.setParameter("id", ownerId);
         List<Sale> sales = query.getResultList();
         return sales;
@@ -183,14 +196,14 @@ public class CarSaleBean implements CarSale{
 
     @Override
     public List<Sale> getSalesByBuyer(Long buyerId) {
-        Query query = em.createQuery("FROM Sale s WHERE s.buyer.id =:id");
+        TypedQuery<Sale> query = em.createQuery("FROM Sale s WHERE s.buyer.id =:id", Sale.class);
         query.setParameter("id", buyerId);
         List<Sale> sales = query.getResultList();
         return sales;
     }
     @Override
     public List<Sale> getSalesByCar(Long carId) {
-        Query query = em.createQuery("FROM Sale s WHERE s.car.id =:id");
+        TypedQuery<Sale> query = em.createQuery("FROM Sale s WHERE s.car.id =:id", Sale.class);
         query.setParameter("id", carId);
         List<Sale> sales = query.getResultList();
         return sales;
@@ -204,7 +217,7 @@ public class CarSaleBean implements CarSale{
             Owner owner = (Owner) query.getSingleResult();
             return List.of(owner);
         } else if (ctx.isCallerInRole("admin")) {
-            Query query = em.createQuery("FROM Owner", Owner.class);
+            TypedQuery<Owner> query = em.createQuery("FROM Owner", Owner.class);
             List<Owner> owners = query.getResultList();
             return owners;
         }
@@ -224,7 +237,7 @@ public class CarSaleBean implements CarSale{
             Buyer buyer = (Buyer) query.getSingleResult();
             return List.of(buyer);
         } else if(ctx.isCallerInRole("admin")) {
-            Query query = em.createQuery("FROM Buyer", Buyer.class);
+            TypedQuery<Buyer> query = em.createQuery("FROM Buyer", Buyer.class);
             List<Buyer> buyers = query.getResultList();
             return buyers;
         }
@@ -350,7 +363,7 @@ public class CarSaleBean implements CarSale{
         sale.setPrice(price);
         sale.setPaymentMethod("Credit Card");
         sale.setPaymentStatus(PaymentStatus.PENDING);
-        sale.setDate(java.time.LocalDate.now());
+        sale.setDate(new java.util.Date());
         //set the car as not available 
         car.setAvailable(false);
 

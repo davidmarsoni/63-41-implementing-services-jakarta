@@ -1,5 +1,8 @@
 package ch.hevs.businessobject;
 
+/**
+ * Represents the status of a payment.
+ */
 public enum PaymentStatus {
     ACCEPTED, PENDING, REFUSED;
 

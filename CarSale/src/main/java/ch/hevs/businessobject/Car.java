@@ -1,15 +1,12 @@
 package ch.hevs.businessobject;
-
 import java.math.BigDecimal;
-
-import javax.management.loading.PrivateClassLoader;
-
-
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a car.
+ */
 @Entity
 public class Car {
     @Id
@@ -17,21 +14,23 @@ public class Car {
     private Long id;
 
     //relations
-    @ManyToOne()
+    @ManyToOne() // no cascade here
     private CarBrand carBrand;
 
-    @ManyToOne()
-    private Owner owner;
+    @ManyToOne() // no cascade here
+    private Owner owner; 
 
-    @OneToMany(mappedBy = "car")
+    @OneToMany(mappedBy = "car") // no cascade here 
     private List<Sale> sales;
 
     //attributes
     private String model;
     private int year_of_construction;
-    private int Kilometers;
+    private int kilometers;
     private TypeOfFuel fuel;
+    @Column(nullable = true)
     private String color;
+    @Column(nullable = true)
     private String description;
     private BigDecimal price;
     private boolean isAvailable;
@@ -48,17 +47,17 @@ public class Car {
      * 
      * @param model the model of the car
      * @param year_of_construction the year of construction of the car
-     * @param Kilometers the number of kilometers driven by the car
+     * @param kilometers the number of kilometers driven by the car
      * @param fuel the type of fuel used by the car
      * @param color the available color of the car
      * @param price the price of the car
      * @param isAvailable the availability of the car
      */
-    public Car(CarBrand carBrand, String model, int year_of_construction, int Kilometers, TypeOfFuel fuel, BigDecimal price, boolean isAvailable) {
+    public Car(CarBrand carBrand, String model, int year_of_construction, int kilometers, TypeOfFuel fuel, BigDecimal price, boolean isAvailable) {
         this.carBrand = carBrand;
         this.model = model;
         this.year_of_construction = year_of_construction;
-        this.Kilometers = Kilometers;
+        this.kilometers = kilometers;
         this.fuel = fuel;
         this.price = price;
         this.isAvailable = isAvailable;
@@ -70,18 +69,18 @@ public class Car {
      * @param carBrand the car brand of the car
      * @param model the model of the car
      * @param year_of_construction the year of construction of the car
-     * @param Kilometers the number of kilometers driven by the car
+     * @param kilometers the number of kilometers driven by the car
      * @param fuel the type of fuel used by the car
      * @param price the price of the car
      * @param isAvailable the availability of the car
      * @param color the available color of the car
      * @param description the available description of the car
      */
-    public Car(CarBrand carBrand, String model, int year_of_construction, int Kilometers, TypeOfFuel fuel, BigDecimal price, boolean isAvailable, String color, String description) {
+    public Car(CarBrand carBrand, String model, int year_of_construction, int kilometers, TypeOfFuel fuel, BigDecimal price, boolean isAvailable, String color, String description) {
         this.carBrand = carBrand;
         this.model = model;
         this.year_of_construction = year_of_construction;
-        this.Kilometers = Kilometers;
+        this.kilometers = kilometers;
         this.fuel = fuel;
         this.price = price;
         this.isAvailable = isAvailable;
@@ -140,7 +139,7 @@ public class Car {
      * @return int the number of kilometers driven by the car
      */
     public int getKilometers() {
-        return Kilometers;
+        return kilometers;
     }
 
     /**
@@ -148,8 +147,8 @@ public class Car {
      * 
      * @param Kilometers the number of kilometers to set
      */
-    public void setKilometers(int Kilometers) {
-        this.Kilometers = Kilometers;
+    public void setKilometers(int kilometers) {
+        this.kilometers = kilometers;
     }
 
     /**

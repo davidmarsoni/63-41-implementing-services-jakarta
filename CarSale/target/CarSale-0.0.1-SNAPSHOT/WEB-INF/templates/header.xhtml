@@ -7,9 +7,12 @@
   xmlns:f="http://java.sun.com/jsf/core"
 >
   <body>
+    <!-- I had no choice but using command button for the navigation because h:link dosen't allow
+        To use action before the link and h:commandLink have a herf="#" that have cause many mess
+        durring my tests and have some weird behevior-->
     <nav class="navbar navbar-expand-sm bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">CarSale</a>
+        <a class="navbar-brand" href="#">Selling Cars</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -32,7 +35,7 @@
               </h:link>
             </li>
             <li class="nav-item">
-              <h:form>
+              <h:form rendered="#{transferBean.isUserOwner() or transferBean.isUserAdmin()}">
                 <h:commandButton
                   value="Cars Manage"
                   action="#{transferBean.navigateToManageCars}"
@@ -41,7 +44,7 @@
               </h:form>
             </li>
             <li class="nav-item">
-              <h:form>
+              <h:form rendered="#{transferBean.isUserBuyer() or transferBean.isUserAdmin()}">
                 <h:commandButton
                   value="Buy a car"
                   action="#{transferBean.navigateToCarsBuy}"
@@ -50,7 +53,7 @@
               </h:form>
             </li>
             <li class="nav-item">
-              <h:form>
+              <h:form rendered="#{transferBean.isUserBuyer() or transferBean.isUserAdmin()}">
                 <h:commandButton
                   value="Buyer Dashboard"
                   action="#{transferBean.navigateToBuyerDashboard}"
@@ -59,7 +62,7 @@
               </h:form>
             </li>
             <li class="nav-item">
-              <h:form>
+              <h:form rendered="#{transferBean.isUserOwner() or transferBean.isUserAdmin()}">
                 <h:commandButton
                   value="Owner Dashboard"
                   action="#{transferBean.navigateToOwnerDashboard}"
@@ -73,7 +76,10 @@
               <li class="nav-item">
                 <a class="nav-link">
                   hi &#x1F44B;,
-                  <h:outputText value="#{transferBean.currentUser()}" />
+                  <h:outputText value="#{transferBean.currentUser()}" />!
+
+                  Your role is:
+                  <h:outputText value="#{transferBean.currentUserRole()}" />
                 </a>
               </li>
             </ul>

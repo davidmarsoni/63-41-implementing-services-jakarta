@@ -5,6 +5,9 @@ import java.util.List;
 
 import jakarta.persistence.*;
 
+/**
+ * Represents a car brand.
+ */
 @Entity
 @Table(name = "CarBrand")
 public class CarBrand {
@@ -13,7 +16,7 @@ public class CarBrand {
     private Long id;
 
     //relations
-    @OneToMany(mappedBy = "carBrand")
+    @OneToMany(mappedBy = "carBrand") //no cascade here
     private List<Car> cars;
 
     //attributes
@@ -25,6 +28,9 @@ public class CarBrand {
     @Column(nullable = true)
     private String description;
 
+    /**
+     * Constructs a new CarBrand object.
+     */
     public CarBrand() {
         this(null, null, null, null);
     }

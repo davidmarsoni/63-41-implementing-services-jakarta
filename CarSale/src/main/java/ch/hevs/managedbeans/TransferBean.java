@@ -189,6 +189,10 @@ public class TransferBean implements Serializable {
         return carSale.isUserBuyer();
     }
 
+    public String currentUserRole() {
+        return carSale.getCurrentUserRole();
+    }
+
     // === car management ===
     public void addUpdateCar() {
         String message = "";

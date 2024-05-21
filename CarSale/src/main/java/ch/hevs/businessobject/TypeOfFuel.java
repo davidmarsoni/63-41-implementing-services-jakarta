@@ -1,5 +1,8 @@
 package ch.hevs.businessobject;
 
+/**
+ * Represents the type of fuel of a car.
+ */
 public enum TypeOfFuel {
     GASOLINE, DIESEL, ELECTRIC, HYBRID;
 

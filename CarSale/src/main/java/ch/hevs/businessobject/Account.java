@@ -1,11 +1,12 @@
 package ch.hevs.businessobject;
 
-import java.sql.Date;
-
+import java.time.LocalDate;
+import java.time.Period;
 import jakarta.persistence.*;
 
 /**
- * Account
+ * This class represents an account and it used to store 
+ * the information of a person in other classes with inheritance.
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -21,12 +22,26 @@ public class Account {
     private String phone;
     private String email;
     @Column(nullable = true)
-    private Date birthdate;
+    private LocalDate birthdate;
 
+    /**
+     * Constructor for creating an Account object.
+     */
     public Account() {
     }
 
-    public Account(String username, String firstname, String lastname, String address, String phone, String email, Date birthdate) {
+    /**
+     * Constructor for creating an Account object with specified properties.
+     *
+     * @param username  the username of the account
+     * @param firstname the first name of the account holder
+     * @param lastname  the last name of the account holder
+     * @param address   the address of the account holder
+     * @param phone     the phone number of the account holder
+     * @param email     the email address of the account holder
+     * @param birthdate the birthdate of the account holder
+     */
+    public Account(String username, String firstname, String lastname, String address, String phone, String email, LocalDate birthdate) {
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -37,26 +52,26 @@ public class Account {
     }
 
     /**
-     * Get the ID of the person.
+     * Get the ID of the account.
      *
-     * @return Long the id
+     * @return the ID of the account
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * Get the first name of the person.
-     * 
-     * @return String the first name
+     * Get the first name of the account holder.
+     *
+     * @return the first name of the account holder
      */
     public String getFirstname() {
         return firstname;
     }
 
     /**
-     * Set the first name of the person.
-     * 
+     * Set the first name of the account holder.
+     *
      * @param firstname the first name to set
      */
     public void setFirstname(String firstname) {
@@ -64,17 +79,17 @@ public class Account {
     }
 
     /**
-     * Get the last name of the person.
-     * 
-     * @return String the last name
+     * Get the last name of the account holder.
+     *
+     * @return the last name of the account holder
      */
     public String getLastname() {
         return lastname;
     }
 
     /**
-     * Set the last name of the person.
-     * 
+     * Set the last name of the account holder.
+     *
      * @param lastname the last name to set
      */
     public void setLastname(String lastname) {
@@ -82,17 +97,17 @@ public class Account {
     }
 
     /**
-     * Get the address of the person.
-     * 
-     * @return String the address
+     * Get the address of the account holder.
+     *
+     * @return the address of the account holder
      */
     public String getAddress() {
         return address;
     }
 
     /**
-     * Set the address of the person.
-     * 
+     * Set the address of the account holder.
+     *
      * @param address the address to set
      */
     public void setAddress(String address) {
@@ -100,17 +115,17 @@ public class Account {
     }
 
     /**
-     * Get the phone number of the person.
-     * 
-     * @return String the phone number
+     * Get the phone number of the account holder.
+     *
+     * @return the phone number of the account holder
      */
     public String getPhone() {
         return phone;
     }
 
     /**
-     * Set the phone number of the person.
-     * 
+     * Set the phone number of the account holder.
+     *
      * @param phone the phone number to set
      */
     public void setPhone(String phone) {
@@ -118,17 +133,17 @@ public class Account {
     }
 
     /**
-     * Get the email address of the person.
-     * 
-     * @return String the email address
+     * Get the email address of the account holder.
+     *
+     * @return the email address of the account holder
      */
     public String getEmail() {
         return email;
     }
 
     /**
-     * Set the email address of the person.
-     * 
+     * Set the email address of the account holder.
+     *
      * @param email the email address to set
      */
     public void setEmail(String email) {
@@ -136,52 +151,67 @@ public class Account {
     }
 
     /**
-     * Get the birthdate of the person.
-     * 
-     * @return Date the birthdate
+     * Get the birthdate of the account holder.
+     *
+     * @return the birthdate of the account holder
      */
-    public Date getBirthdate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
     /**
-     * Set the birthdate of the person.
-     * 
+     * Set the birthdate of the account holder.
+     *
      * @param birthdate the birthdate to set
      */
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
     }
 
+    /**
+     * Get the full name of the account holder.
+     *
+     * @return the full name of the account holder
+     */
     public String getFullName() {
         return this.firstname + " " + this.lastname;
     }
 
-    @Override
-    public String toString() {
-        return "Person [address=" + address + ", birthdate=" + birthdate + ", email=" + email + ", firstname="
-                + firstname + ", lastname=" + lastname + ", phone=" + phone + "]";
-    }
-
     /**
-     * @param id the id to set
+     * Set the ID of the account.
+     *
+     * @param id the ID to set
      */
     public void setId(Long id) {
         this.id = id;
     }
 
     /**
-     * @return String return the username
+     * Get the username of the account.
+     *
+     * @return the username of the account
      */
     public String getUsername() {
         return username;
     }
 
     /**
+     * Set the username of the account.
+     *
      * @param username the username to set
      */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Get the age of the account holder.
+     */
+    public int getAge() {
+        if (birthdate != null) {
+            return Period.between(birthdate, LocalDate.now()).getYears();
+        } else {
+            throw new IllegalStateException("Birthdate is not set");
+        }
+    }
 }

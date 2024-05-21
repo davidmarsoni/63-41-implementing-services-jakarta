@@ -1,8 +1,8 @@
 package ch.hevs.test;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 import ch.hevs.businessobject.*;
@@ -27,7 +27,6 @@ public class PopulateDB extends TestCase {
 
 			// populate the database with car brands
 			List<CarBrand> carBrands = populateCarBrands(em);
-
 			// populate the database with some data
 
 			Owner o1 = new Owner(
@@ -37,7 +36,7 @@ public class PopulateDB extends TestCase {
 					"Rue de la Gare 12",
 					"079 123 45 67",
 					"jeandupont@gmail.com",
-					Date.valueOf("1990-01-01"),
+					LocalDate.parse("1990-01-01"),
 					"CH4989144487571917565" //fake IBAN that is (provided by http://randomiban.com/?country=Switzerland)
 			);
 			Owner o2 = new Owner(
@@ -47,7 +46,7 @@ public class PopulateDB extends TestCase {
 					"Place de la commune 1",
 					"079 123 45 67",
 					"marie@google.com",
-					Date.valueOf("1990-01-01"),
+					LocalDate.parse("1990-01-01"),
 					"CH4989144487571917565" //fake IBAN that is (provided by http://randomiban.com/?country=Switzerland)
 			);
 			Buyer b1 = new Buyer(
@@ -57,7 +56,7 @@ public class PopulateDB extends TestCase {
 				"Rue de la Gare 12",
 				"079 123 45 67",
 				"durandalpaulie@yahoo-mail.com",
-				Date.valueOf("1990-01-01")
+				LocalDate.parse("1990-01-01")
 			);
 
 			Buyer b2 = new Buyer(
@@ -67,7 +66,7 @@ public class PopulateDB extends TestCase {
 				"Place de la commune 1",
 				"079 123 45 67",
 				"jack@gmail.com",
-				Date.valueOf("1990-01-01")
+				LocalDate.parse("1990-01-01")
 			);
 
 			Car car = new Car(

@@ -1,10 +1,11 @@
 package ch.hevs.businessobject;
-
 import java.math.BigDecimal;
-import java.time.LocalDate;
-
+import java.util.Date;
 import jakarta.persistence.*;
 
+/**
+ * Represents a sale.
+ */
 @Entity
 @Table(name = "Sale")
 public class Sale {
@@ -13,25 +14,38 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
-    @ManyToOne()
+    @ManyToOne() // no cascade here
     private Car car;
-
-    @ManyToOne()
+ 
+    @ManyToOne() // no cascade here
     private Buyer buyer;
 
-    @ManyToOne()
+    @ManyToOne() // no cascade here
     private Owner owner;
 
     //attributes
-    private LocalDate date;
+    private Date date;
     private BigDecimal price;
     private String paymentMethod;
     private PaymentStatus paymentStatus;
 
+    /**
+     * Constructs a new Sale object.
+     */
     public Sale() {
     }
 
-    public Sale(Car car, Buyer buyer,Owner owner, LocalDate date, BigDecimal price, String paymentMethod, PaymentStatus paymentStatus) {
+    /**
+     * Constructs a new Sale object with the specified details.
+     * @param car the car of the sale
+     * @param buyer the buyer of the sale
+     * @param owner the owner of the sale
+     * @param date the date of the sale
+     * @param price the price of the sale
+     * @param paymentMethod the payment method of the sale
+     * @param paymentStatus the payment status of the sale
+     */
+    public Sale(Car car, Buyer buyer,Owner owner, Date date, BigDecimal price, String paymentMethod, PaymentStatus paymentStatus) {
         this.car = car;
         this.buyer = buyer;
         this.owner = owner;
@@ -91,14 +105,14 @@ public class Sale {
     /**
      * @return LocalDate return the date
      */
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
     /**
      * @param date the date to set
      */
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

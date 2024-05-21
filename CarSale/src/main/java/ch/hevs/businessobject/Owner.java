@@ -1,11 +1,12 @@
 package ch.hevs.businessobject;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import jakarta.persistence.*;
-
+/**
+ * Represents an owner.
+ */
 @Entity
 @Table(name = "Owner")
 public class Owner extends Account {
@@ -13,22 +14,36 @@ public class Owner extends Account {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner",cascade = CascadeType.REMOVE) //if the owner is deleted, all his cars are deleted
     private List<Car> cars;
 
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner") //no cascade here
     private List<Sale> sales;
 
     //attributes
     private String IBAN;
 
+    /*
+     * Constructor of the owner.
+     */
     public Owner() {
         this.cars = new ArrayList<Car>();
         this.sales = new ArrayList<Sale>();         
     }
 
-    public Owner(String username,String firstname, String lastname, String address, String phone, String email,Date birthdate, String IBAN) {
+    /**
+     * Constructor of the owner with all the attributes.
+     * @param username username of the owner
+     * @param firstname firstname of the owner
+     * @param lastname lastname of the owner
+     * @param address address of the owner
+     * @param phone phone number of the owner
+     * @param email email of the owner
+     * @param birthdate birthdate of the owner
+     * @param IBAN IBAN of the owner
+     */
+    public Owner(String username,String firstname, String lastname, String address, String phone, String email,LocalDate birthdate, String IBAN) {
         super(username,firstname, lastname, address, phone, email, birthdate);
         this.IBAN = IBAN;
         this.cars = new ArrayList<Car>();
