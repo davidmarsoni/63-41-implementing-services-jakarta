@@ -9,6 +9,7 @@ import ch.hevs.businessobject.Car;
 import ch.hevs.businessobject.CarBrand;
 import ch.hevs.businessobject.Owner;
 import ch.hevs.businessobject.PaymentStatus;
+import ch.hevs.businessobject.Roles;
 import ch.hevs.businessobject.Sale;
 import ch.hevs.businessobject.TypeOfFuel;
 import jakarta.annotation.Resource;
@@ -26,10 +27,11 @@ import jakarta.persistence.TypedQuery;
 
 
 @Stateless
-@RolesAllowed(value = {"owner","buyer","admin"})
+@RolesAllowed(value = {"admin", "owner", "buyer"})
 public class CarSaleBean implements CarSale{
     @PersistenceContext(unitName = "carSalePU", type=PersistenceContextType.TRANSACTION)
 	private EntityManager em;
+
 
     @Resource
 	private SessionContext ctx;
@@ -41,34 +43,64 @@ public class CarSaleBean implements CarSale{
 
     @Override 
     public boolean isUserAdmin() {
-        return ctx.isCallerInRole("admin");
+        return ctx.isCallerInRole(Roles.ADMIN.toString());
     }
 
     @Override 
     public boolean isUserOwner() {
-        return ctx.isCallerInRole("owner");
+        return ctx.isCallerInRole(Roles.OWNER.toString());
     }
 
     @Override 
     public boolean isUserBuyer() {
-        return ctx.isCallerInRole("buyer");
+        return ctx.isCallerInRole(Roles.BUYER.toString());
     }
 
-    @Override
+    @Override 
     public String getCurrentUser() {
         return ctx.getCallerPrincipal().getName();
     }
 
+    private boolean isCallerAuthorized(String role, Long callerId) {
+        if(isUserAdmin()) {
+            return true;
+        }
+        if (!ctx.isCallerInRole(role)) {
+            return false;
+        }
+    
+        if (callerId == null) {
+            return true;
+        }
+    
+        if(isUserOwner()) {
+            Query query = em.createQuery("FROM Owner o WHERE o.username =:username");
+            query.setParameter("username", getCurrentUser());
+            Owner owner = (Owner) query.getSingleResult();
+            return owner.getId().equals(callerId);
+        }
+
+        if(isUserBuyer()) {
+            Query query = em.createQuery("FROM Buyer b WHERE b.username =:username");
+            query.setParameter("username", getCurrentUser());
+            Buyer buyer = (Buyer) query.getSingleResult();
+            return buyer.getId().equals(callerId);
+        }
+
+        return false;
+    }
+    
     @Override
     public String getCurrentUserRole() {
-        if(isUserAdmin()) {
-            return "admin";
-        } else if(isUserOwner()) {
-            return "owner";
-        } else if(isUserBuyer()) {
-            return "buyer";
+        String[] roles = {Roles.ADMIN.toString(), Roles.OWNER.toString(), Roles.BUYER.toString()};
+    
+        for (String role : roles) {
+            if (ctx.isCallerInRole(role)) {
+                return role;
+            }
         }
-        return "unknown";
+    
+        return Roles.UNKNOWN.toString();
     }
 
     @Override
@@ -80,16 +112,24 @@ public class CarSaleBean implements CarSale{
 
     @Override
     public List<Car> getCars(Long ownerID) {
-        TypedQuery<Car> query = em.createQuery("FROM Car c WHERE c.owner.id =:id", Car.class);
-        query.setParameter("id", ownerID);
-        List<Car> cars = query.getResultList();
-        return cars;
+        if(isCallerAuthorized(Roles.OWNER.toString(), ownerID)) {
+            TypedQuery<Car> query = em.createQuery("FROM Car c WHERE c.owner.id =:id", Car.class);
+            query.setParameter("id", ownerID);
+            List<Car> cars = query.getResultList();
+            return cars;
+        }
+        return null;
     }
 
     @Override
     public List<Car> getFilterdCars(Long carBrandId, String model, int min_year_of_construction,
-            int max_year_of_construction, int min_kilometers, int max_kilometers, String fuel, String color,
-            BigDecimal min_price, BigDecimal max_price) {
+        int max_year_of_construction, int min_kilometers, int max_kilometers, String fuel, String color,
+        BigDecimal min_price, BigDecimal max_price) {
+        
+        if(isCallerAuthorized(Roles.BUYER.toString(), null)) {
+            return null;
+        }
+        
         //if the parameters are null, don't filter by them and by default return all the cars that are available
         String queryStr = "FROM Car c WHERE 1=1 and c.isAvailable = true";
 
@@ -188,18 +228,24 @@ public class CarSaleBean implements CarSale{
 
     @Override
     public List<Sale> getSalesByOwner(Long ownerId) {
-        TypedQuery<Sale> query = em.createQuery("FROM Sale s WHERE s.owner.id =:id", Sale.class);
-        query.setParameter("id", ownerId);
-        List<Sale> sales = query.getResultList();
-        return sales;
+        if(!isCallerAuthorized(Roles.OWNER.toString(), ownerId)) {
+            TypedQuery<Sale> query = em.createQuery("FROM Sale s WHERE s.owner.id =:id", Sale.class);
+            query.setParameter("id", ownerId);
+            List<Sale> sales = query.getResultList();
+            return sales;
+        }
+        return null;
     }
 
     @Override
     public List<Sale> getSalesByBuyer(Long buyerId) {
-        TypedQuery<Sale> query = em.createQuery("FROM Sale s WHERE s.buyer.id =:id", Sale.class);
-        query.setParameter("id", buyerId);
-        List<Sale> sales = query.getResultList();
-        return sales;
+        if(!isCallerAuthorized(Roles.BUYER.toString(), buyerId)) {
+            TypedQuery<Sale> query = em.createQuery("FROM Sale s WHERE s.buyer.id =:id", Sale.class);
+            query.setParameter("id", buyerId);
+            List<Sale> sales = query.getResultList();
+            return sales;
+        }
+        return null;
     }
     @Override
     public List<Sale> getSalesByCar(Long carId) {
@@ -246,13 +292,20 @@ public class CarSaleBean implements CarSale{
 
     @Override
     public Buyer getBuyer(Long id) {
-        return em.find(Buyer.class, id);
+        if(isCallerAuthorized(Roles.BUYER.toString(), id)) {
+            return em.find(Buyer.class, id);
+        }
+        return null;
     }    
 
     @Override
     public String addCar(Long carBrandId, String model, int yearOfConstruction, int kilometers, String fuel,
             String color, String description, BigDecimal price, boolean isAvailable, Long ownerId) {
         // verify all the parameters and return a String with the error message
+        if(!isCallerAuthorized(Roles.OWNER.toString(), ownerId)) {
+            return "You are not authorized to add a car";
+        }
+
         String message = verifyCarParameters(carBrandId, model, yearOfConstruction, kilometers, fuel, color, description, price, isAvailable, ownerId);
         if (message != null) {
             return message;
@@ -285,6 +338,11 @@ public class CarSaleBean implements CarSale{
     public String updateCar(Long selectedCar, Long sourceCarBrands, String model, int year_of_construction,
             int kilometers, String soucefuel, String color, String description, BigDecimal price, boolean isAvailable,
             Long sourceOwner) {
+
+        if(!isCallerAuthorized(Roles.OWNER.toString(), sourceOwner)) {
+            return "You are not authorized to update a car";
+        }
+
         String message = verifyCarParameters(sourceCarBrands, model, year_of_construction, kilometers, soucefuel, color, description, price, isAvailable, sourceOwner);
         if (message != null) {
             return message;
@@ -326,6 +384,9 @@ public class CarSaleBean implements CarSale{
         if (car == null) {
             return "Car not found";
         }
+        if(!isCallerAuthorized(Roles.OWNER.toString(), car.getOwner().getId())) {
+            return "You are not authorized to remove this car";
+        }
         em.remove(car);
         return "Car successfully removed";
     }
@@ -333,6 +394,10 @@ public class CarSaleBean implements CarSale{
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String buyCar(Long carId, Long buyerId, BigDecimal price) {
+        if(!isCallerAuthorized(Roles.BUYER.toString(), buyerId)) {
+            return "You are not authorized to buy a car";
+        }
+
         if(price == null) {
             return "Price is missing";
         }
@@ -385,6 +450,10 @@ public class CarSaleBean implements CarSale{
         if (sale == null) {
             return "Sale not found";
         }
+
+        if(!isCallerAuthorized(Roles.OWNER.toString(), sale.getOwner().getId())) {
+            return "You are not authorized to accept this sale";
+        }
         // set the payment status to PAID
         sale.setPaymentStatus(PaymentStatus.ACCEPTED);
 
@@ -407,6 +476,10 @@ public class CarSaleBean implements CarSale{
 
         if (sale == null) {
             return "Sale not found";
+        }
+
+        if(!isCallerAuthorized(Roles.OWNER.toString(), sale.getOwner().getId())) {
+            return "You are not authorized to refuse this sale";
         }
         // set the payment status to REFUSED
         sale.setPaymentStatus(PaymentStatus.REFUSED);
