@@ -81,26 +81,15 @@ public class PopulateDB extends TestCase {
 					"Ford Fiesta 2020 in good condition"
 			);
 
-			em.persist(o1);
+			
 			em.persist(o2);
 			em.persist(b1);
 			em.persist(b2);
+
 			em.persist(car);
-
 			o1.addCar(car);
-
 			em.persist(o1);
 
-			/*Sale sale = new Sale(
-					car,
-					b1,
-					LocalDate.now(),
-					BigDecimal.valueOf(20000),
-					"Credit Card",
-					PaymentStatus.PAID
-			);
-
-			em.persist(sale);*/
 			tx.commit();
 
 		} catch (Exception e) {

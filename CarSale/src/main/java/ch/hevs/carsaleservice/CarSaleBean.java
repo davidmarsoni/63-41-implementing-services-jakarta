@@ -125,11 +125,6 @@ public class CarSaleBean implements CarSale{
     public List<Car> getFilterdCars(Long carBrandId, String model, int min_year_of_construction,
         int max_year_of_construction, int min_kilometers, int max_kilometers, String fuel, String color,
         BigDecimal min_price, BigDecimal max_price) {
-        
-        if(isCallerAuthorized(Roles.BUYER.toString(), null)) {
-            return null;
-        }
-        
         //if the parameters are null, don't filter by them and by default return all the cars that are available
         String queryStr = "FROM Car c WHERE 1=1 and c.isAvailable = true";
 
@@ -229,23 +224,26 @@ public class CarSaleBean implements CarSale{
     @Override
     public List<Sale> getSalesByOwner(Long ownerId) {
         if(!isCallerAuthorized(Roles.OWNER.toString(), ownerId)) {
-            TypedQuery<Sale> query = em.createQuery("FROM Sale s WHERE s.owner.id =:id", Sale.class);
-            query.setParameter("id", ownerId);
-            List<Sale> sales = query.getResultList();
-            return sales;
+            return null;
         }
-        return null;
+
+        TypedQuery<Sale> query = em.createQuery("FROM Sale s WHERE s.owner.id =:id", Sale.class);
+        query.setParameter("id", ownerId);
+        List<Sale> sales = query.getResultList();
+        return sales;
     }
 
     @Override
     public List<Sale> getSalesByBuyer(Long buyerId) {
         if(!isCallerAuthorized(Roles.BUYER.toString(), buyerId)) {
-            TypedQuery<Sale> query = em.createQuery("FROM Sale s WHERE s.buyer.id =:id", Sale.class);
-            query.setParameter("id", buyerId);
-            List<Sale> sales = query.getResultList();
-            return sales;
+            return null;
         }
-        return null;
+
+        TypedQuery<Sale> query = em.createQuery("FROM Sale s WHERE s.buyer.id =:id", Sale.class);
+        query.setParameter("id", buyerId);
+        List<Sale> sales = query.getResultList();
+        return sales;
+        
     }
     @Override
     public List<Sale> getSalesByCar(Long carId) {
