@@ -4,4 +4,4 @@
 *.lnk
 *.iml
 *.vscode/
-CarSale/target/*
+*CarSale/target/*
