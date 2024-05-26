@@ -72,7 +72,7 @@ public class PopulateDB extends TestCase {
 			Car car = new Car(
 					carBrands.get(0),
 					"Ford Fiesta 2020",
-					2022,
+					2020,
 					100000,
 					TypeOfFuel.HYBRID,
 					BigDecimal.valueOf(20000),
@@ -81,14 +81,29 @@ public class PopulateDB extends TestCase {
 					"Ford Fiesta 2020 in good condition"
 			);
 
-			
-			em.persist(o2);
+			Car car2 = new Car(
+					carBrands.get(9),
+				"Citroën 2 CV",
+				1979,
+				100000,
+				TypeOfFuel.GASOLINE,
+				BigDecimal.valueOf( 8000 ),
+				true,
+				"Red",
+				"The 1979 Citroën 2 CV, in red, has 100,000 kilometers, runs on gasoline, and is priced at €8000. It's a charming, iconic vintage car."
+			);
+
+
 			em.persist(b1);
 			em.persist(b2);
 
 			em.persist(car);
 			o1.addCar(car);
 			em.persist(o1);
+
+			em.persist(car2);
+			o2.addCar(car2);
+			em.persist(o2);
 
 			tx.commit();
 

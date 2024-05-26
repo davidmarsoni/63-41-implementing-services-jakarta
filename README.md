@@ -64,4 +64,3 @@ resume of the roles:
 | admin      | all pages                  |
 | owner      | carsManage, ownerDashboard |
 | buyer      | carsBuy, buyerDashboard    |
-
