@@ -25,6 +25,12 @@ Note you need to have your database empty and running before running the test.
 To add accounts to the wildfly server, we will need to add users to the “ApplicationRealm” (i.e., application users) of our application server. With WildFly, this can be done by using the script
 “rootJakartaEE\tools\ wildfly-27.0.0.Final\bin\add-user.bat” or
 “rootJakartaEE\tools\ wildfly-27.0.0.Final\bin\add-user.sh”.
+Yyou first have to choose the option 'b' to add the user to the ApplicationRealm.
+After that, you have to choose the username and password of the user.
+Then you have to choose the roles of the user, you can choose multiple roles by separating them with a comma.
+And at the end, you have to confirm the user creation.
+You have to say no to the next question, because we don't add the user to the management realm.
+And you need to repeat this process for each user.
 
 the accounts are the following:
 
@@ -38,6 +44,9 @@ the accounts are the following:
 
 n.b : the password are indicative, you can change them if you want.
 n.b2: the username and roles are case sensitive be careful.
+
+To verify that the users are correctly added, you can go to the following path `rootJakartaEE\tools\ wildfly-27.0.0.Final\standalone\configuration\application-users.properties` and you should see the users added.
+To verify the roles, you can go to the following path `rootJakartaEE\tools\ wildfly-27.0.0.Final\standalone\configuration\application-roles.properties` and you should see the roles added.
 
 5. Run the project
 

@@ -2,6 +2,7 @@ package ch.hevs.carsaleservice;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Calendar;
 import java.util.List;
 
 import ch.hevs.businessobject.Buyer;
@@ -502,6 +503,10 @@ public class CarSaleBean implements CarSale{
         if (year_of_construction <= 1850){
             return "Year of construction must be greater than 1850";
         }
+        //if the year of construction is greater than the next year, return an error message
+        if (year_of_construction > Calendar.getInstance().get(Calendar.YEAR)) {
+            return "Year of construction is in the future";
+        }
         if (kilometers < 0) {
             return "Negative kilometers are not allowed";
         }
@@ -514,6 +519,21 @@ public class CarSaleBean implements CarSale{
         if(sourceOwner == null) {
             return "Owner is missing";
         }
+
+        if(model.length() > 255) {
+            return "Model name is too long";
+        }
+
+        if(color.length() > 255) {
+            return "Color name is too long";
+        }
+
+        if(description.length() > 255) {
+            return "Description is too long";
+        }
+
+        
+
         return null;
     }
 }
