@@ -403,6 +403,10 @@ public class CarSaleBean implements CarSale{
         if(price.compareTo(BigDecimal.ZERO) <= 0) {
             return "Price must be greater than 0";
         }
+            
+        if(price.compareTo(new BigDecimal(999999999)) > 0) {
+            return "Price is too big you set a price that is greater than 999'999'999";
+        }
     
         //verify if the car and the buyer exist
         Car car = em.find(Car.class, carId);
