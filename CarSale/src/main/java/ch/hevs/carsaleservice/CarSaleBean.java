@@ -516,20 +516,24 @@ public class CarSaleBean implements CarSale{
         if (price == null) {
             return "Price is missing";
         }
+        
+        if(price.compareTo(new BigDecimal(999999999)) > 0) {
+            return "Price is too big you set a price that is greater than 999'999'999";
+        }
         if(sourceOwner == null) {
             return "Owner is missing";
         }
 
         if(model.length() > 255) {
-            return "Model name is too long";
+            return "Model name is too long you can't use more than 255 characters";
         }
 
         if(color.length() > 255) {
-            return "Color name is too long";
+            return "Color name is too long you can't use more than 255 characters";
         }
 
         if(description.length() > 255) {
-            return "Description is too long";
+            return "Description is too long you can't use more than 255 characters";
         }
 
         
